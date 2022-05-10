@@ -1,22 +1,23 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
-	"sync/atomic"
+
+	"github.com/RaymondCode/simple-demo/dao"
+	"github.com/gin-gonic/gin"
 )
 
 // usersLoginInfo use map to store user info, and key is username+password for demo
 // user data will be cleared every time the server starts
 // test data: username=zhanglei, password=douyin
 var usersLoginInfo = map[string]User{
-	"zhangleidouyin": {
-		Id:            1,
-		Name:          "zhanglei",
-		FollowCount:   10,
-		FollowerCount: 5,
-		IsFollow:      true,
-	},
+	// "zhangleidouyin": {
+	// 	Id:            1,
+	// 	Name:          "zhanglei",
+	// 	FollowCount:   10,
+	// 	FollowerCount: 5,
+	// 	IsFollow:      true,
+	// },
 }
 
 var userIdSequence = int64(1)
@@ -37,22 +38,38 @@ func Register(c *gin.Context) {
 	password := c.Query("password")
 
 	token := username + password
-
+	//先从缓存中判断用户是否存在
 	if _, exist := usersLoginInfo[token]; exist {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "User already exist"},
 		})
-	} else {
-		atomic.AddInt64(&userIdSequence, 1)
+	} else if _, err := dao.GetUserInfoByName(username); err != nil { //从数据库中读取，失败则用户已经存在
+
+		err := dao.CreateUserInfo(username, password)
+		if err != nil {
+			c.JSON(http.StatusOK, UserLoginResponse{
+				Response: Response{StatusCode: 1, StatusMsg: "create failed"},
+			})
+		}
+		userInfo, err := dao.GetUserInfoByName(username)
+		if err != nil {
+			c.JSON(http.StatusOK, UserLoginResponse{
+				Response: Response{StatusCode: 1, StatusMsg: "create failed"},
+			})
+		}
 		newUser := User{
-			Id:   userIdSequence,
-			Name: username,
+			Id:   int64(userInfo.ID),
+			Name: userInfo.Name,
 		}
 		usersLoginInfo[token] = newUser
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 0},
-			UserId:   userIdSequence,
-			Token:    username + password,
+			UserId:   int64(userInfo.ID),
+			Token:    userInfo.Name + userInfo.Password,
+		})
+	} else {
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: Response{StatusCode: 1, StatusMsg: "User already exist"},
 		})
 	}
 }
@@ -77,12 +94,25 @@ func Login(c *gin.Context) {
 }
 
 func UserInfo(c *gin.Context) {
+	id := c.Query("id")
 	token := c.Query("token")
 
 	if user, exist := usersLoginInfo[token]; exist {
 		c.JSON(http.StatusOK, UserResponse{
 			Response: Response{StatusCode: 0},
 			User:     user,
+		})
+	} else if userInfo, err := dao.GetUserInfoById(id); err != nil {
+		//暂时未处理点赞信息
+		c.JSON(http.StatusOK, UserResponse{
+			Response: Response{StatusCode: 0},
+			User: User{
+				Id:            int64(userInfo.ID),
+				Name:          userInfo.Name,
+				FollowCount:   0,
+				FollowerCount: 0,
+				IsFollow:      false,
+			},
 		})
 	} else {
 		c.JSON(http.StatusOK, UserResponse{
