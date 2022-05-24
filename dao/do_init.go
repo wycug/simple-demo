@@ -19,7 +19,7 @@ var db *gorm.DB
 
 func InitDB() error {
 
-	host := "106.13.196.236" //106.13.196.236
+	host := "127.0.0.1" //106.13.196.236
 	port := "3306"
 	database := "douyin"
 	username := "root"
@@ -40,8 +40,8 @@ func InitDB() error {
 	}
 	db = db_init
 	//迁移
-	// db.AutoMigrate(&UserInfo{})
-	// db.AutoMigrate(&Model{})
+	db.Table("user_info").AutoMigrate(&UserInfo{})
+	db.Table("follow_info").AutoMigrate(&FollowInfo{})
 	// db.Create(&UserInfo{Name: "zhangsan", Password: "11111"})
 	// users, err := userDao.getUserInfolist()
 	// fmt.Println("%d", users[0].ID)

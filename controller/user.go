@@ -86,6 +86,18 @@ func Login(c *gin.Context) {
 			UserId:   user.Id,
 			Token:    token,
 		})
+	} else if userInfo, err := dao.GetUserInfoByName(username); err == nil { //从数据库中读取，成功则用户已经存在，并载入到缓存中
+
+		newUser := User{
+			Id:   int64(userInfo.ID),
+			Name: userInfo.Name,
+		}
+		usersLoginInfo[token] = newUser
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: Response{StatusCode: 0},
+			UserId:   int64(userInfo.ID),
+			Token:    userInfo.Name + userInfo.Password,
+		})
 	} else {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
@@ -119,4 +131,18 @@ func UserInfo(c *gin.Context) {
 			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
 		})
 	}
+}
+
+func GetUserById(id string) (User, error) {
+	userInfo, err := dao.GetUserInfoById(id)
+	var user User
+	if err != nil {
+		return user, err
+	}
+	user.Id = int64(userInfo.ID)
+	user.Name = userInfo.Name
+	user.FollowCount = 10
+	user.FollowerCount = 10
+	user.IsFollow = false
+	return user, nil
 }
