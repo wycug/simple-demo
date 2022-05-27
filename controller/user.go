@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -41,7 +40,7 @@ func Register(c *gin.Context) {
 
 	token := username + password
 	//先从缓存中判断用户是否存在
-	if _, exist := UserIsExist(token, "", username); exist {
+	if _, exist := UserIsExist(token); exist {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "User already exist"},
 		})
@@ -53,12 +52,14 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "create failed"},
 		})
+		return
 	}
 	userInfo, err := dao.GetUserInfoByName(username)
 	if err != nil {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "create failed"},
 		})
+		return
 	}
 	newUser := userInfoToUser(userInfo)
 	usersLoginInfo[token] = newUser
@@ -74,26 +75,26 @@ func Login(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 
-	token := username + password
-
-	if user, exist := UserIsExist(token, "", username); exist {
+	if userInfo, isLogin := dao.CheckLoginInfo(username, password); isLogin {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 0},
-			UserId:   user.Id,
-			Token:    token,
+			UserId:   userInfo.Id,
+			Token:    userInfo.Token,
 		})
-	} else {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-		})
+		return
 	}
+
+	c.JSON(http.StatusOK, UserLoginResponse{
+		Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+	})
+
 }
 
 func UserInfo(c *gin.Context) {
 	user_id := c.Query("id")
 	token := c.Query("token")
 	id, _ := strconv.ParseInt(user_id, 10, 64)
-	if user, exist := UserIsExist(token, user_id, ""); exist {
+	if user, exist := UserIsExist(token); exist {
 		c.JSON(http.StatusOK, UserResponse{
 			Response: Response{StatusCode: 0},
 			User:     user,
@@ -132,36 +133,16 @@ func GetUserById(id int64) (User, error) {
 	return user, nil
 }
 
-func UserIsExist(token, user_id, user_name string) (User, bool) {
+func UserIsExist(token string) (User, bool) {
 	var user User
 	if user, exist := usersLoginInfo[token]; exist {
 		return user, true
 	}
-
-	if user_id != "" {
-		id, err := strconv.ParseInt(user_id, 10, 64)
-		if err != nil {
-			fmt.Errorf("user id invilid")
-		} else if userInfo, err := dao.GetUserInfoById(id); err == nil {
-			user = User{
-				Id:            int64(userInfo.Id),
-				Name:          userInfo.Name,
-				FollowCount:   userInfo.FollowCount,
-				FollowerCount: userInfo.FollowerCount,
-				IsFollow:      false,
-			}
-			usersLoginInfo[token] = user
-			return user, true
-		}
+	if userInfo, err := dao.GetUserInfoByToken(token); err == nil {
+		user = userInfoToUser(userInfo)
+		usersLoginInfo[token] = user
+		return user, true
 	}
-	if user_name != "" {
-		if userInfo, err := dao.GetUserInfoByName(user_name); err == nil {
-			user = userInfoToUser(userInfo)
-			usersLoginInfo[token] = user
-			return user, true
-		}
-	}
-
 	return user, false
 }
 
