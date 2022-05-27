@@ -21,8 +21,6 @@ var usersLoginInfo = map[string]User{
 	// },
 }
 
-var userIdSequence = int64(1)
-
 type UserLoginResponse struct {
 	Response
 	UserId int64  `json:"user_id,omitempty"`
@@ -99,23 +97,29 @@ func UserInfo(c *gin.Context) {
 			Response: Response{StatusCode: 0},
 			User:     user,
 		})
-	} else if userInfo, err := dao.GetUserInfoById(id); err != nil {
+	} else if user, err := GetUserById(id); err != nil {
 		//暂时未处理点赞信息
 		c.JSON(http.StatusOK, UserResponse{
 			Response: Response{StatusCode: 0},
-			User: User{
-				Id:            int64(userInfo.Id),
-				Name:          userInfo.Name,
-				FollowCount:   0,
-				FollowerCount: 0,
-				IsFollow:      false,
-			},
+			User:     user,
 		})
 	} else {
 		c.JSON(http.StatusOK, UserResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
 		})
 	}
+}
+
+func UserIsExist(token string) (User, bool) {
+	var user User
+	if user, exist := usersLoginInfo[token]; exist {
+		return user, true
+	}
+	if user, err := GetUserByToken(token); err == nil {
+		usersLoginInfo[token] = user
+		return user, true
+	}
+	return user, false
 }
 
 func GetUserById(id int64) (User, error) {
@@ -133,17 +137,19 @@ func GetUserById(id int64) (User, error) {
 	return user, nil
 }
 
-func UserIsExist(token string) (User, bool) {
+func GetUserByToken(token string) (User, error) {
+	userInfo, err := dao.GetUserInfoByToken(token)
 	var user User
-	if user, exist := usersLoginInfo[token]; exist {
-		return user, true
+	if err != nil {
+		return user, err
 	}
-	if userInfo, err := dao.GetUserInfoByToken(token); err == nil {
-		user = userInfoToUser(userInfo)
-		usersLoginInfo[token] = user
-		return user, true
-	}
-	return user, false
+	user = userInfoToUser(userInfo)
+
+	//等待读取点赞数据
+	user.FollowCount = 0
+	user.FollowerCount = 0
+
+	return user, nil
 }
 
 func userInfoToUser(userInfo dao.UserInfo) User {
