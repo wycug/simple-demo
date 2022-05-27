@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/RaymondCode/simple-demo/dao"
 	"github.com/gin-gonic/gin"
@@ -88,10 +90,10 @@ func Login(c *gin.Context) {
 }
 
 func UserInfo(c *gin.Context) {
-	id := c.Query("id")
+	user_id := c.Query("id")
 	token := c.Query("token")
-
-	if user, exist := UserIsExist(token, id, ""); exist {
+	id, _ := strconv.ParseInt(user_id, 10, 64)
+	if user, exist := UserIsExist(token, user_id, ""); exist {
 		c.JSON(http.StatusOK, UserResponse{
 			Response: Response{StatusCode: 0},
 			User:     user,
@@ -115,7 +117,7 @@ func UserInfo(c *gin.Context) {
 	}
 }
 
-func GetUserById(id string) (User, error) {
+func GetUserById(id int64) (User, error) {
 	userInfo, err := dao.GetUserInfoById(id)
 	var user User
 	if err != nil {
@@ -135,8 +137,12 @@ func UserIsExist(token, user_id, user_name string) (User, bool) {
 	if user, exist := usersLoginInfo[token]; exist {
 		return user, true
 	}
+
 	if user_id != "" {
-		if userInfo, err := dao.GetUserInfoById(user_id); err == nil {
+		id, err := strconv.ParseInt(user_id, 10, 64)
+		if err != nil {
+			fmt.Errorf("user id invilid")
+		} else if userInfo, err := dao.GetUserInfoById(id); err == nil {
 			user = User{
 				Id:            int64(userInfo.Id),
 				Name:          userInfo.Name,

@@ -7,7 +7,7 @@ type UserDao struct {
 
 var userDao UserDao
 
-func GetUserInfoById(id string) (UserInfo, error) {
+func GetUserInfoById(id int64) (UserInfo, error) {
 	var user UserInfo
 	result := db.Table("user_info").Where("id = ?", id).Find(&user)
 	if result.Error != nil {
@@ -18,6 +18,7 @@ func GetUserInfoById(id string) (UserInfo, error) {
 	}
 	return user, nil
 }
+
 func GetUserInfoByName(name string) (UserInfo, error) {
 	var user UserInfo
 	result := db.Table("user_info").Where("name = ?", name).Find(&user)
@@ -43,7 +44,7 @@ func GetUserInfolist() ([]UserInfo, error) {
 }
 
 func CreateUserInfo(name, password string) error {
-	result := db.Table("user_info").Create(&UserInfo{Name: name, Password: password})
+	result := db.Table("user_info").Create(&UserInfo{Name: name, Password: password, Token: name + password})
 	if result.Error != nil {
 		return result.Error
 	}
