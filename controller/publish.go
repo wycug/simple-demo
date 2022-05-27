@@ -42,7 +42,7 @@ func Publish(c *gin.Context) {
 		})
 		return
 	}
-	ipport := fmt.Sprintf("%s%s%s/static/", URL, PORT, GROUPPATH)
+	ipport := fmt.Sprintf("%s%s/static/", URL, PORT)
 	url := ipport + finalName
 	err = dao.CreateVideoInfo(user.Id, url, "", title)
 	if err != nil {
