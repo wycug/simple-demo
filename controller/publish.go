@@ -19,7 +19,7 @@ func Publish(c *gin.Context) {
 	token := c.PostForm("token")
 	title := c.PostForm("title")
 	fmt.Println(token)
-	if _, exist := UserIsExist(token, "", ""); !exist {
+	if _, exist := UserIsExist(token); !exist {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
 		return
 	}

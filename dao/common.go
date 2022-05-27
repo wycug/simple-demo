@@ -9,6 +9,7 @@ type UserInfo struct {
 	Password      string `gorm:"varchar(50);not null"`
 	FollowCount   int64
 	FollowerCount int64
+	Token         string `gorm:"not null;index;"`
 }
 
 type FollowInfo struct {
