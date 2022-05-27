@@ -1,9 +1,11 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
+
+	"github.com/RaymondCode/simple-demo/dao"
+	"github.com/gin-gonic/gin"
 )
 
 type FeedResponse struct {
@@ -19,4 +21,23 @@ func Feed(c *gin.Context) {
 		VideoList: DemoVideos,
 		NextTime:  time.Now().Unix(),
 	})
+}
+
+func videoInfoListToVideoList(videoInfoList []dao.VideoInfo) []Video {
+	var videos []Video
+	for _, videoInfo := range videoInfoList {
+		videos = append(videos)
+	}
+	return videos
+}
+func videoInfoToVideo(videoInfo dao.VideoInfo) Video {
+	return Video{
+		Id:            videoInfo.Id,
+		Author:        videoInfo.AuthorId,
+		PlayUrl:       videoInfo.PlayUrl,
+		CoverUrl:      videoInfo.CoverUrl,
+		FavoriteCount: videoInfo.FavoriteCount,
+		CommentCount:  videoInfo.CommentCount,
+		Title:         videoInfo.Title,
+	}
 }

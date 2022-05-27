@@ -1,18 +1,5 @@
 package dao
 
-import "gorm.io/gorm"
-
-type UserInfo struct {
-	gorm.Model
-	Id       uint   `gorm:"primaryKey"`
-	Name     string `gorm:"varchar(50);not null;index;unique"`
-	Password string `gorm:"varchar(50);not null"`
-}
-
-func (UserInfo) TableName() string {
-	return "user_info"
-}
-
 type UserDao struct {
 }
 
@@ -20,7 +7,7 @@ var userDao UserDao
 
 func GetUserInfoById(id string) (UserInfo, error) {
 	var user UserInfo
-	result := db.Where("id = ?", id).First(&user)
+	result := db.Table("user_info").Where("id = ?", id).Find(&user)
 	if result.RowsAffected != 0 {
 		return user, result.Error
 	}
@@ -28,8 +15,8 @@ func GetUserInfoById(id string) (UserInfo, error) {
 }
 func GetUserInfoByName(name string) (UserInfo, error) {
 	var user UserInfo
-	result := db.Where("name = ?", name).First(&user)
-	if result.RowsAffected != 0 {
+	result := db.Table("user_info").Where("name = ?", name).Find(&user)
+	if result.RowsAffected == 0 {
 		return user, result.Error
 	}
 	return user, nil
@@ -37,7 +24,7 @@ func GetUserInfoByName(name string) (UserInfo, error) {
 
 func GetUserInfolist() ([]UserInfo, error) {
 	var users []UserInfo
-	result := db.Find(&users)
+	result := db.Table("user_info").Find(&users)
 	if result.RowsAffected == 0 {
 		return nil, result.Error
 	}
@@ -45,7 +32,7 @@ func GetUserInfolist() ([]UserInfo, error) {
 }
 
 func CreateUserInfo(name, password string) error {
-	result := db.Create(&UserInfo{Name: name, Password: password})
+	result := db.Table("user_info").Create(&UserInfo{Name: name, Password: password})
 	if result.RowsAffected == 0 {
 		return result.Error
 	}
