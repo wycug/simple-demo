@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const URL string = "http://192.168.137.1"
+const URL string = "http://106.13.196.236"
 const PORT string = ":8080"
 const GROUPPATH string = "/douyin"
 const STATICPATH string = "./public"

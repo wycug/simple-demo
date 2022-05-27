@@ -61,7 +61,7 @@ func Register(c *gin.Context) {
 	usersLoginInfo[token] = newUser
 	c.JSON(http.StatusOK, UserLoginResponse{
 		Response: Response{StatusCode: 0},
-		UserId:   int64(userInfo.ID),
+		UserId:   int64(userInfo.Id),
 		Token:    userInfo.Name + userInfo.Password,
 	})
 
@@ -100,7 +100,7 @@ func UserInfo(c *gin.Context) {
 		c.JSON(http.StatusOK, UserResponse{
 			Response: Response{StatusCode: 0},
 			User: User{
-				Id:            int64(userInfo.ID),
+				Id:            int64(userInfo.Id),
 				Name:          userInfo.Name,
 				FollowCount:   0,
 				FollowerCount: 0,
@@ -137,7 +137,7 @@ func UserIsExist(token, user_id, user_name string) (User, bool) {
 	if user_id != "" {
 		if userInfo, err := dao.GetUserInfoById(user_id); err == nil {
 			user = User{
-				Id:            int64(userInfo.ID),
+				Id:            int64(userInfo.Id),
 				Name:          userInfo.Name,
 				FollowCount:   userInfo.FollowCount,
 				FollowerCount: userInfo.FollowerCount,
@@ -160,7 +160,7 @@ func UserIsExist(token, user_id, user_name string) (User, bool) {
 
 func userInfoToUser(userInfo dao.UserInfo) User {
 	return User{
-		Id:            int64(userInfo.ID),
+		Id:            int64(userInfo.Id),
 		Name:          userInfo.Name,
 		FollowCount:   userInfo.FollowCount,
 		FollowerCount: userInfo.FollowerCount,
