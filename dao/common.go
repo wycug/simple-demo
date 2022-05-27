@@ -27,3 +27,10 @@ type VideoInfo struct {
 	CommentCount  int64
 	Title         string
 }
+
+type FavoriteInfo struct {
+	gorm.Model
+	UserId     int64
+	VideoId    int64
+	IsFavorite int64
+}
