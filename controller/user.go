@@ -122,6 +122,10 @@ func GetUserById(id string) (User, error) {
 	}
 	user = userInfoToUser(userInfo)
 
+	//等待读取点赞数据
+	user.FollowCount = 0
+	user.FollowerCount = 0
+
 	return user, nil
 }
 
@@ -131,7 +135,7 @@ func UserIsExist(token, user_id, user_name string) (User, bool) {
 		return user, true
 	}
 	if user_id != "" {
-		if userInfo, err := dao.GetUserInfoById(user_id); err != nil {
+		if userInfo, err := dao.GetUserInfoById(user_id); err == nil {
 			user = User{
 				Id:            int64(userInfo.ID),
 				Name:          userInfo.Name,
@@ -144,7 +148,7 @@ func UserIsExist(token, user_id, user_name string) (User, bool) {
 		}
 	}
 	if user_name != "" {
-		if userInfo, err := dao.GetUserInfoByName(user_name); err != nil {
+		if userInfo, err := dao.GetUserInfoByName(user_name); err == nil {
 			user = userInfoToUser(userInfo)
 			usersLoginInfo[token] = user
 			return user, true
