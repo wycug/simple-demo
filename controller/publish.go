@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"path/filepath"
 
+	"github.com/RaymondCode/simple-demo/dao"
 	"github.com/gin-gonic/gin"
 )
 
@@ -15,62 +16,13 @@ type VideoListResponse struct {
 
 // Publish check token then save upload file to public directory
 func Publish(c *gin.Context) {
-
-	// title := c.PostForm("title")
-	// token := c.PostForm("token")
-	// fmt.Println(title, token)
-	// // fmt.Println(title)
-	// // var user User
-	// // if _, exist := usersLoginInfo[token]; !exist {
-	// // 	// user_, err := GetUserById(id)
-
-	// // 	// if err != nil {
-	// // 	// 	c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
-	// // 	// 	return
-	// // 	// }
-	// // 	// user = user_
-	// // } else {
-	// // 	user = usersLoginInfo[token]
-	// // }
-
-	// data, err := c.FormFile("data") //318672   //319097
-	// // fmt.Println(data.Filename)
-	// if err != nil {
-	// 	c.JSON(http.StatusOK, Response{
-	// 		StatusCode: 1,
-	// 		StatusMsg:  err.Error(),
-	// 	})
-	// 	return
-	// }
-
-	// filename := filepath.Base(data.Filename)
-	// // user := usersLoginInfo[token]
-	// finalName := fmt.Sprintf("%d_%s", 1, filename)
-	// saveFile := filepath.Join("./public/", finalName)
-	// if err := c.SaveUploadedFile(data, saveFile); err != nil {
-	// 	c.JSON(http.StatusOK, Response{
-	// 		StatusCode: 1,
-	// 		StatusMsg:  err.Error(),
-	// 	})
-	// 	return
-	// }
-
-	// // c.JSON(http.StatusOK, Response{
-	// // 	StatusCode: 0,
-	// // 	StatusMsg:  finalName + " uploaded successfully",
-	// // })
-	// c.JSON(http.StatusOK, Response{
-	// 	StatusCode: 0,
-	// 	StatusMsg:  " uploaded successfully",
-	// })
-
 	token := c.PostForm("token")
-
-	if _, exist := usersLoginInfo[token]; !exist {
+	title := c.PostForm("title")
+	fmt.Println(token)
+	if _, exist := UserIsExist(token, "", ""); !exist {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
 		return
 	}
-
 	data, err := c.FormFile("data")
 	if err != nil {
 		c.JSON(http.StatusOK, Response{
@@ -79,12 +31,21 @@ func Publish(c *gin.Context) {
 		})
 		return
 	}
-
 	filename := filepath.Base(data.Filename)
 	user := usersLoginInfo[token]
 	finalName := fmt.Sprintf("%d_%s", user.Id, filename)
 	saveFile := filepath.Join("./public/", finalName)
 	if err := c.SaveUploadedFile(data, saveFile); err != nil {
+		c.JSON(http.StatusOK, Response{
+			StatusCode: 1,
+			StatusMsg:  err.Error(),
+		})
+		return
+	}
+	ipport := fmt.Sprintf("%s%s%s/static/", URL, PORT, GROUPPATH)
+	url := ipport + finalName
+	err = dao.CreateVideoInfo(user.Id, url, "", title)
+	if err != nil {
 		c.JSON(http.StatusOK, Response{
 			StatusCode: 1,
 			StatusMsg:  err.Error(),

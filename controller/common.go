@@ -1,5 +1,10 @@
 package controller
 
+var URL string = ""
+var PORT string = ""
+var GROUPPATH string = ""
+var STATICPATH string = ""
+
 type Response struct {
 	StatusCode int32  `json:"status_code"`
 	StatusMsg  string `json:"status_msg,omitempty"`

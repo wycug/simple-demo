@@ -17,15 +17,15 @@ var db *gorm.DB
 // 	DeletedAt gorm.DeletedAt `gorm:"index"`
 // }
 
-func InitDB() error {
+func InitDB(host, port, database, username, password, charset string) error {
 
 	// host := "106.13.196.236" //
-	host := "127.0.0.1"
-	port := "3306"
-	database := "douyin"
-	username := "root"
-	password := "666666"
-	charset := "utf8"
+	// host := "127.0.0.1"
+	// port := "3306"
+	// database := "douyin"
+	// username := "root"
+	// password := "666666"
+	// charset := "utf8"
 	args := fmt.Sprintf("%s:%s@(%s:%s)/%s?charset=%s&parseTime=true",
 		username,
 		password,
@@ -44,9 +44,6 @@ func InitDB() error {
 	db.Table("user_info").AutoMigrate(&UserInfo{})
 	db.Table("follow_info").AutoMigrate(&FollowInfo{})
 	db.Table("video_info").AutoMigrate(&VideoInfo{})
-	// db.Create(&UserInfo{Name: "zhangsan", Password: "11111"})
-	// users, err := userDao.getUserInfolist()
-	// fmt.Println("%d", users[0].ID)
 	return nil
 
 }
