@@ -43,6 +43,7 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "User already exist"},
 		})
+		return
 	}
 
 	err := dao.CreateUserInfo(username, password)

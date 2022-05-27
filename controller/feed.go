@@ -27,7 +27,7 @@ func Feed(c *gin.Context) {
 	videoInfoList, err := dao.GetVideoList(MaxVideoNums)
 	if err != nil {
 		c.JSON(http.StatusOK, FeedResponse{
-			Response:  Response{StatusCode: 1, StatusMsg: "get video error!"},
+			Response:  Response{StatusCode: 1, StatusMsg: err.Error()},
 			VideoList: nil,
 			NextTime:  time.Now().Unix(),
 		})
@@ -53,7 +53,7 @@ func videoInfoListToVideoList(videoInfoList []dao.VideoInfo) []Video {
 	return videos
 }
 func videoInfoToVideo(videoInfo dao.VideoInfo) (Video, error) {
-	user, err := GetUserById(strconv.FormatInt(videoInfo.Id, 10))
+	user, err := GetUserById(strconv.FormatInt(videoInfo.AuthorId, 10))
 	if err != nil {
 		return Video{}, err
 	}
