@@ -39,39 +39,32 @@ func Register(c *gin.Context) {
 
 	token := username + password
 	//先从缓存中判断用户是否存在
-	if _, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User already exist"},
-		})
-	} else if _, err := dao.GetUserInfoByName(username); err != nil { //从数据库中读取，失败则用户已经存在
-
-		err := dao.CreateUserInfo(username, password)
-		if err != nil {
-			c.JSON(http.StatusOK, UserLoginResponse{
-				Response: Response{StatusCode: 1, StatusMsg: "create failed"},
-			})
-		}
-		userInfo, err := dao.GetUserInfoByName(username)
-		if err != nil {
-			c.JSON(http.StatusOK, UserLoginResponse{
-				Response: Response{StatusCode: 1, StatusMsg: "create failed"},
-			})
-		}
-		newUser := User{
-			Id:   int64(userInfo.ID),
-			Name: userInfo.Name,
-		}
-		usersLoginInfo[token] = newUser
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 0},
-			UserId:   int64(userInfo.ID),
-			Token:    userInfo.Name + userInfo.Password,
-		})
-	} else {
+	if _, exist := UserIsExist(token, "", username); exist {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 1, StatusMsg: "User already exist"},
 		})
 	}
+
+	err := dao.CreateUserInfo(username, password)
+	if err != nil {
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: Response{StatusCode: 1, StatusMsg: "create failed"},
+		})
+	}
+	userInfo, err := dao.GetUserInfoByName(username)
+	if err != nil {
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: Response{StatusCode: 1, StatusMsg: "create failed"},
+		})
+	}
+	newUser := userInfoToUser(userInfo)
+	usersLoginInfo[token] = newUser
+	c.JSON(http.StatusOK, UserLoginResponse{
+		Response: Response{StatusCode: 0},
+		UserId:   int64(userInfo.ID),
+		Token:    userInfo.Name + userInfo.Password,
+	})
+
 }
 
 func Login(c *gin.Context) {
@@ -80,23 +73,11 @@ func Login(c *gin.Context) {
 
 	token := username + password
 
-	if user, exist := usersLoginInfo[token]; exist {
+	if user, exist := UserIsExist(token, "", username); exist {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 0},
 			UserId:   user.Id,
 			Token:    token,
-		})
-	} else if userInfo, err := dao.GetUserInfoByName(username); err == nil { //从数据库中读取，成功则用户已经存在，并载入到缓存中
-
-		newUser := User{
-			Id:   int64(userInfo.ID),
-			Name: userInfo.Name,
-		}
-		usersLoginInfo[token] = newUser
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: Response{StatusCode: 0},
-			UserId:   int64(userInfo.ID),
-			Token:    userInfo.Name + userInfo.Password,
 		})
 	} else {
 		c.JSON(http.StatusOK, UserLoginResponse{
@@ -109,7 +90,7 @@ func UserInfo(c *gin.Context) {
 	id := c.Query("id")
 	token := c.Query("token")
 
-	if user, exist := usersLoginInfo[token]; exist {
+	if user, exist := UserIsExist(token, id, ""); exist {
 		c.JSON(http.StatusOK, UserResponse{
 			Response: Response{StatusCode: 0},
 			User:     user,
@@ -139,10 +120,46 @@ func GetUserById(id string) (User, error) {
 	if err != nil {
 		return user, err
 	}
-	user.Id = int64(userInfo.ID)
-	user.Name = userInfo.Name
-	user.FollowCount = 10
-	user.FollowerCount = 10
-	user.IsFollow = false
+	user = userInfoToUser(userInfo)
+
 	return user, nil
+}
+
+func UserIsExist(token, user_id, user_name string) (User, bool) {
+	var user User
+	if user, exist := usersLoginInfo[token]; exist {
+		return user, true
+	}
+	if user_id != "" {
+		if userInfo, err := dao.GetUserInfoById(user_id); err != nil {
+			user = User{
+				Id:            int64(userInfo.ID),
+				Name:          userInfo.Name,
+				FollowCount:   userInfo.FollowCount,
+				FollowerCount: userInfo.FollowerCount,
+				IsFollow:      false,
+			}
+			usersLoginInfo[token] = user
+			return user, true
+		}
+	}
+	if user_name != "" {
+		if userInfo, err := dao.GetUserInfoByName(user_name); err != nil {
+			user = userInfoToUser(userInfo)
+			usersLoginInfo[token] = user
+			return user, true
+		}
+	}
+
+	return user, false
+}
+
+func userInfoToUser(userInfo dao.UserInfo) User {
+	return User{
+		Id:            int64(userInfo.ID),
+		Name:          userInfo.Name,
+		FollowCount:   userInfo.FollowCount,
+		FollowerCount: userInfo.FollowerCount,
+		IsFollow:      false,
+	}
 }

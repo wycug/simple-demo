@@ -4,15 +4,26 @@ import "gorm.io/gorm"
 
 type UserInfo struct {
 	gorm.Model
-	Id             uint64 `gorm:"primaryKey"`
-	Name           string `gorm:"varchar(50);not null;unique"`
-	Password       string `gorm:"varchar(50);not null"`
-	FollowCount    uint64
-	Follower_count uint64
+	Id            int64  `gorm:"primaryKey"`
+	Name          string `gorm:"varchar(50);not null;unique"`
+	Password      string `gorm:"varchar(50);not null"`
+	FollowCount   int64
+	FollowerCount int64
 }
 
 type FollowInfo struct {
 	gorm.Model
-	UserId       uint64 `gorm:"not null;index;"`
-	FollowUserId uint64 `gorm:"not null;index;"`
+	UserId       int64 `gorm:"not null;index;"`
+	FollowUserId int64 `gorm:"not null;index;"`
+}
+
+type VideoInfo struct {
+	gorm.Model
+	Id            int64 `gorm:"primaryKey"`
+	AuthorId      int64
+	PlayUrl       string
+	CoverUrl      string
+	FavoriteCount int64
+	CommentCount  int64
+	Title         string
 }
