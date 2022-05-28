@@ -44,6 +44,7 @@ func InitDB(host, port, database, username, password, charset string) error {
 	db.Table("user_info").AutoMigrate(&UserInfo{})
 	db.Table("follow_info").AutoMigrate(&FollowInfo{})
 	db.Table("video_info").AutoMigrate(&VideoInfo{})
+	db.Table("favorite_info").AutoMigrate(&FavoriteInfo{})
 	return nil
 
 }

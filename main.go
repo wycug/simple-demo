@@ -13,7 +13,7 @@ const PORT string = ":8080"
 const GROUPPATH string = "/douyin"
 const STATICPATH string = "./public"
 
-const SQLHOST string = "127.0.0.1"
+const SQLHOST string = "106.13.196.236"
 const SQLPORT string = "3306"
 const SQLDATABASE string = "douyin"
 const SQLUSER string = "root"
@@ -28,7 +28,6 @@ func main() {
 	r := gin.Default()
 	r.MaxMultipartMemory = 100 << 20
 	initRouter(r)
-
 	r.Run(PORT) // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
 
