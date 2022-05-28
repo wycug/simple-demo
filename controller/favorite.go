@@ -21,13 +21,8 @@ type FavoriteActionListRequest struct {
 
 // FavoriteAction no practical effect, just check if token is valid
 func FavoriteAction(c *gin.Context) {
-	//token := c.Param("token")
-	//userId := c.Param("user_id")
-	//videoId := c.Param("video_id")
-	//actionType := c.Param("action_type")
 	var params FavoriteActionListRequest
 	c.BindJSON(&params)
-	//fmt.Println(params)
 	if _, exist := usersLoginInfo[params.Token]; exist {
 		if params.ActionType == "1" {
 			err := dao.FavoriteAction(params.UserId, params.VideoId)
