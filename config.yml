@@ -1,0 +1,13 @@
+# 启动端口号
+server:
+  protocol: http
+  port: 8080
+
+# MySQL数据源配置
+mysql:
+  username: root
+  password: 666666
+  url: tcp(106.13.196.236:3306)/douyin?charset=utf8&parseTime=True&loc=Local
+  maxIdleConns: 10
+  maxOpenConns: 100
+  connMaxLifetime: 1440
