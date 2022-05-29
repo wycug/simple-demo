@@ -1,9 +1,4 @@
 nohup: ignoring input
-go: downloading gorm.io/driver/mysql v1.3.3
-go: downloading gorm.io/gorm v1.23.5
-go: downloading github.com/go-sql-driver/mysql v1.6.0
-go: downloading github.com/jinzhu/inflection v1.0.0
-go: downloading github.com/jinzhu/now v1.1.4
 [GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
 
 [GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
@@ -27,6 +22,5 @@ go: downloading github.com/jinzhu/now v1.1.4
 [GIN-debug] GET    /douyin/relation/follower/list/ --> github.com/RaymondCode/simple-demo/controller.FollowerList (3 handlers)
 [GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
 Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
-[GIN-debug] Environment variable PORT is undefined. Using port :8080 by default
 [GIN-debug] Listening and serving HTTP on :8080
 [GIN-debug] [ERROR] listen tcp :8080: bind: address already in use
