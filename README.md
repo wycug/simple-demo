@@ -1,7 +1,5 @@
 # simple-demo
-<<<<<<< HEAD
- 
-=======
+
 
 ## 抖音项目服务端简单示例
 
@@ -10,8 +8,20 @@
 工程无其他依赖，直接编译运行即可
 
 ```shell
-go build && ./simple-demo
+go run main.go router.go
 ```
+main.go的可以修改启动参数
+
+const URL string = "http://192.168.137.1"
+const PORT string = ":8080"
+const GROUPPATH string = "/douyin"
+const STATICPATH string = "./public"
+const SQLHOST string = "106.13.196.236"
+const SQLPORT string = "3306"
+const SQLDATABASE string = "douyin"
+const SQLUSER string = ""
+const SQLPASSWORD string = ""
+const SQLCHARSET string = "utf8"
 
 ### 功能说明
 
@@ -22,5 +32,4 @@ go build && ./simple-demo
 
 ### 测试数据
 
-测试数据写在 demo_data.go 中，用于列表接口的 mock 测试
->>>>>>> b804684f820af4a748d0ee86448f0c4bd8e48be0
+
