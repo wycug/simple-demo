@@ -2,7 +2,6 @@ package controller
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/RaymondCode/simple-demo/dao"
 	"github.com/gin-gonic/gin"
@@ -89,16 +88,8 @@ func Login(c *gin.Context) {
 }
 
 func UserInfo(c *gin.Context) {
-	user_id := c.Query("id")
 	token := c.Query("token")
-	id, _ := strconv.ParseInt(user_id, 10, 64)
 	if user, exist := UserIsExist(token); exist {
-		c.JSON(http.StatusOK, UserResponse{
-			Response: Response{StatusCode: 0},
-			User:     user,
-		})
-	} else if user, err := GetUserById(id); err != nil {
-		//暂时未处理点赞信息
 		c.JSON(http.StatusOK, UserResponse{
 			Response: Response{StatusCode: 0},
 			User:     user,

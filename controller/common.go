@@ -5,6 +5,8 @@ var PORT string = ""
 var GROUPPATH string = ""
 var STATICPATH string = ""
 
+//定义返回的前端数据
+
 type Response struct {
 	StatusCode int32  `json:"status_code"`
 	StatusMsg  string `json:"status_msg,omitempty"`
