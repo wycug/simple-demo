@@ -28,7 +28,7 @@ func FavoriteAction(c *gin.Context) {
 	var params FavoriteActionListRequest
 	c.BindJSON(&params)
 	//fmt.Println(params)
-	if _, exist := usersLoginInfo[params.Token]; exist {
+	if _, exist := UserIsExist(params.Token); exist {
 		if params.ActionType == "1" {
 			err := dao.FavoriteAction(params.UserId, params.VideoId)
 			if err != nil {
