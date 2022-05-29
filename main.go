@@ -16,11 +16,11 @@ const STATICPATH string = "./public"
 
 //host := "106.13.196.236"
 //host := "127.0.0.1"
-const SQLHOST string = "106.13.196.236"
+const SQLHOST string = "127.0.0.1"
 const SQLPORT string = "3306"
 const SQLDATABASE string = "douyin"
 const SQLUSER string = "root"
-const SQLPASSWORD string = "666666"
+const SQLPASSWORD string = "123456"
 const SQLCHARSET string = "utf8"
 
 func main() {

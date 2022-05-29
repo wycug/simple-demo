@@ -45,6 +45,7 @@ func InitDB(host, port, database, username, password, charset string) error {
 	db.Table("follow_info").AutoMigrate(&FollowInfo{})
 	db.Table("video_info").AutoMigrate(&VideoInfo{})
 	db.Table("comment_info").AutoMigrate(&CommentInfo{})
+	db.Table("favorite_info").AutoMigrate(&FavoriteInfo{})
 	// db.Table("comment_api").AutoMigrate(&CommentAPI{})
 	// db.Create(&UserInfo{Name: "zhangsan", Password: "11111"})
 	// users, err := userDao.getUserInfolist()
