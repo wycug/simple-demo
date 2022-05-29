@@ -3,6 +3,7 @@ package controller
 import (
 	"log"
 	"net/http"
+
 	"time"
 
 	"github.com/RaymondCode/simple-demo/dao"
@@ -37,6 +38,7 @@ func Feed(c *gin.Context) {
 		VideoList: videos,
 		NextTime:  time.Now().Unix(),
 	})
+
 }
 
 func videoInfoListToVideoList(videoInfoList []dao.VideoInfo) []Video {
