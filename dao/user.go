@@ -2,11 +2,6 @@ package dao
 
 import "errors"
 
-type UserDao struct {
-}
-
-var userDao UserDao
-
 func GetUserInfoById(id int64) (UserInfo, error) {
 	var user UserInfo
 	result := db.Table("user_info").Where("id = ?", id).Find(&user)

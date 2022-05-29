@@ -5,6 +5,7 @@ import (
 
 	"github.com/RaymondCode/simple-demo/controller"
 	"github.com/RaymondCode/simple-demo/dao"
+	"github.com/RaymondCode/simple-demo/initializer"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,7 +35,9 @@ func main() {
 		os.Exit(-1)
 	}
 	r := gin.Default()
-	r.MaxMultipartMemory = 100 << 20
+	initializer.InitConfig()
+	initializer.InitDataBase()
+
 	initRouter(r)
 
 	r.Run(PORT) // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")

@@ -1,36 +1,23 @@
 package config
 
-// import (
-// 	"log"
+// Config 组合全部配置模型
+type Config struct {
+	Server Server `mapstructure:"server"`
+	Mysql  Mysql  `mapstructure:"mysql"`
+}
 
-// 	"gopkg.in/ini.v1"
-// )
+// Server 服务启动端口号配置
+type Server struct {
+	Protocol string `mapstructure:"protocol"`
+	Port     string `mapstructure:"port"`
+}
 
-// var (
-// 	Dbtype     string //数据库类型
-// 	DbHost     string //数据库服务器主机
-// 	DbPort     string //数据服务器端口
-// 	DbUser     string //数据库用户
-// 	DbPassWord string //数据库密码
-// 	DbName     string //数据库名
-
-// )
-
-// func init() {
-// 	f, err := ini.Load("./config/config.ini")
-// 	if err != nil {
-// 		log.Fatal("初始化失败")
-// 	}
-// 	loadDb(f)
-// }
-
-// // loadDb 加载数据库相关配置
-// func loadDb(file *ini.File) {
-// 	s := file.Section("database")
-// 	Dbtype = s.Key("Dbtype").MustString("mysql")
-// 	DbName = s.Key("DbName").MustString("douyin")
-// 	DbPort = s.Key("DbPort").MustString("3306")
-// 	DbHost = s.Key("DbHost").MustString("106.13.196.236")
-// 	DbUser = s.Key("DbUser").MustString("root")
-// 	DbPassWord = s.Key("DbPassWord").MustString("666666")
-// }
+// Mysql MySQL数据源配置
+type Mysql struct {
+	Username        string `mapstructure:"username"`
+	Password        string `mapstructure:"password"`
+	Url             string `mapstructure:"url"`
+	MaxIdleConns    int    `mapstructure:"maxIdleConns"`
+	MaxOpenConns    int    `mapstructure:"maxOpenConns"`
+	ConnMaxLifetime int    `mapstructure:"connMaxLifetime"`
+}
