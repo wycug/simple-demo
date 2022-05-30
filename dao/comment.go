@@ -2,6 +2,7 @@ package dao
 
 import (
 	"errors"
+	"time"
 )
 
 type CommentDao struct{}
@@ -31,19 +32,18 @@ func Addcomment(userID, videoID int64, text, res string) error {
 func Deletecomment(id int64) error {
 	var video VideoInfo
 	var comment CommentInfo
-	result := db.Table("comment_info").Where("id = ? ", id).Delete(&CommentInfo{})
-	if result.Error != nil {
-		return result.Error
-	}
-	if result.RowsAffected == 0 {
-		return result.Error
-	}
-
 	//评论总数-1，更新video
 	db.Table("comment_info").Where("id = ?", id).Find(&comment)
 	db.Table("video_info").Where("id = ?", comment.VideoID).Find(&video)
 	video.CommentCount--
 	db.Table("video_info").Save(&video)
+
+	//防止两个操作发生冲突:需要靠评论的id找到对应的视频
+	time.Sleep(100)
+
+	//软删除
+	// db.Table("comment_info").Where("id = ? ", id).Unscoped().Delete(&CommentInfo{})
+	db.Table("comment_info").Where("id = ? ", id).Delete(&CommentInfo{})
 
 	return nil
 }

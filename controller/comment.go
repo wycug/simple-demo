@@ -180,6 +180,7 @@ func actionDel(c *gin.Context) {
 
 	}
 	fmt.Println(commentID)
+	//在数据库中删除此评论
 	dao.Deletecomment(commentID)
 	// resp := dao.Deletecomment(commentID)
 	// c.JSON(http.StatusOK, resp)
