@@ -24,15 +24,16 @@ type CommentActionResponse struct {
 // CommentAction no practical effect, just check if token is valid
 func CommentAction(c *gin.Context) {
 	token := c.Query("token")
+	actionType := c.Query("action_type")
 
 	if _, exist := UserIsExist(token); exist {
-		c.JSON(http.StatusOK, Response{StatusCode: 0})
-		actionType := c.Query("action_type")
+
 		if actionType == "1" {
 			actionAdd(c)
-		} else {
-			actionDel(c)
+			return
 		}
+		actionDel(c)
+		c.JSON(http.StatusOK, Response{StatusCode: 0})
 	} else {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
 	}
@@ -159,9 +160,12 @@ func actionAdd(c *gin.Context) {
 				Content:    text,
 				CreateDate: res,
 			}})
+		return
+		//实时更新列表
+
 	} else {
 		c.JSON(http.StatusOK, CommentActionResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+			Response: Response{StatusCode: 1, StatusMsg: "新增评论失败"},
 		})
 	}
 }
@@ -171,10 +175,12 @@ func actionDel(c *gin.Context) {
 	commentID, err := strconv.ParseInt(c.Query("comment_id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, CommentActionResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+			Response: Response{StatusCode: 1, StatusMsg: "删除评论失败"},
 		})
 
 	}
 	resp := dao.Deletecomment(commentID)
 	c.JSON(http.StatusOK, resp)
+	return
+	//实时更新列表
 }
