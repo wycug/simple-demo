@@ -32,6 +32,9 @@ func Deletecomment(id int64) error {
 	var video VideoInfo
 	var comment CommentInfo
 	result := db.Table("comment_info").Where("id = ? ", id).Delete(&CommentInfo{})
+	if result.Error != nil {
+		return result.Error
+	}
 	if result.RowsAffected == 0 {
 		return result.Error
 	}

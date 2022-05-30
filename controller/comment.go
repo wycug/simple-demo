@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -31,9 +32,10 @@ func CommentAction(c *gin.Context) {
 		if actionType == "1" {
 			actionAdd(c)
 			return
+		} else {
+			actionDel(c)
+			return
 		}
-		actionDel(c)
-		c.JSON(http.StatusOK, Response{StatusCode: 0})
 	} else {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
 	}
@@ -160,8 +162,6 @@ func actionAdd(c *gin.Context) {
 				Content:    text,
 				CreateDate: res,
 			}})
-		return
-		//实时更新列表
 
 	} else {
 		c.JSON(http.StatusOK, CommentActionResponse{
@@ -179,8 +179,10 @@ func actionDel(c *gin.Context) {
 		})
 
 	}
-	resp := dao.Deletecomment(commentID)
-	c.JSON(http.StatusOK, resp)
-	return
+	fmt.Println(commentID)
+	dao.Deletecomment(commentID)
+	// resp := dao.Deletecomment(commentID)
+	// c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, Response{StatusCode: 0})
 	//实时更新列表
 }

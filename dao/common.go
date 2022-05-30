@@ -36,7 +36,7 @@ type VideoInfo struct {
 
 type CommentInfo struct {
 	gorm.Model
-	Id           int64 `gorm:"comment:自增主键"`
+	Id           int64 `gorm:"primaryKey"`
 	UserID       int64
 	VideoID      int64
 	Content      string `gorm:"varchar(50);not null"`
