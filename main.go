@@ -14,7 +14,7 @@ const URL string = "http://106.13.196.236"
 // //http://192.168.50.1:8080/
 // const URL string = "http://192.168.50.1"
 
-const PORT string = ":8083"
+const PORT string = ":8081"
 const GROUPPATH string = "/douyin"
 const STATICPATH string = "./public"
 
