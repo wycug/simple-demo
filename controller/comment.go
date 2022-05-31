@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -24,14 +25,16 @@ type CommentActionResponse struct {
 // CommentAction no practical effect, just check if token is valid
 func CommentAction(c *gin.Context) {
 	token := c.Query("token")
+	actionType := c.Query("action_type")
 
 	if _, exist := UserIsExist(token); exist {
-		c.JSON(http.StatusOK, Response{StatusCode: 0})
-		actionType := c.Query("action_type")
+
 		if actionType == "1" {
 			actionAdd(c)
+			return
 		} else {
 			actionDel(c)
+			return
 		}
 	} else {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
@@ -44,6 +47,7 @@ func CommentList(c *gin.Context) {
 
 	//查询videoID的所有评论，将查询到的信息封装到comment类中，然后再通过response返回前端
 	videoID, err := strconv.ParseInt(c.Query("video_id"), 10, 64)
+
 	if err != nil {
 		c.JSON(http.StatusOK, CommentListResponse{
 			Response:    Response{StatusCode: 1, StatusMsg: "没找到视频"},
@@ -158,9 +162,10 @@ func actionAdd(c *gin.Context) {
 				Content:    text,
 				CreateDate: res,
 			}})
+
 	} else {
 		c.JSON(http.StatusOK, CommentActionResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+			Response: Response{StatusCode: 1, StatusMsg: "新增评论失败"},
 		})
 	}
 }
@@ -170,10 +175,15 @@ func actionDel(c *gin.Context) {
 	commentID, err := strconv.ParseInt(c.Query("comment_id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusOK, CommentActionResponse{
-			Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+			Response: Response{StatusCode: 1, StatusMsg: "删除评论失败"},
 		})
 
 	}
-	resp := dao.Deletecomment(commentID)
-	c.JSON(http.StatusOK, resp)
+	fmt.Println(commentID)
+	//在数据库中删除此评论
+	dao.Deletecomment(commentID)
+	// resp := dao.Deletecomment(commentID)
+	// c.JSON(http.StatusOK, resp)
+	c.JSON(http.StatusOK, Response{StatusCode: 0})
+	//实时更新列表
 }

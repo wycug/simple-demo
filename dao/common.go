@@ -4,6 +4,8 @@ import (
 	"gorm.io/gorm"
 )
 
+//存放数据定义
+
 type UserInfo struct {
 	gorm.Model
 	Id            int64  `gorm:"primaryKey"`
@@ -11,7 +13,8 @@ type UserInfo struct {
 	Password      string `gorm:"varchar(50);not null"`
 	FollowCount   int64
 	FollowerCount int64
-	Token         string `gorm:"not null;index;"`
+	IsFollow      bool `json:"is_follow,omitempty"`
+	Token         string
 }
 
 type FollowInfo struct {
@@ -33,7 +36,7 @@ type VideoInfo struct {
 
 type CommentInfo struct {
 	gorm.Model
-	Id           int64 `gorm:"comment:自增主键"`
+	Id           int64 `gorm:"primaryKey"`
 	UserID       int64
 	VideoID      int64
 	Content      string `gorm:"varchar(50);not null"`
