@@ -2,12 +2,7 @@ package dao
 
 import "errors"
 
-type UserDao struct {
-}
-
-var userDao UserDao
-
-func GetUserInfoById(id string) (UserInfo, error) {
+func GetUserInfoById(id int64) (UserInfo, error) {
 	var user UserInfo
 	result := db.Table("user_info").Where("id = ?", id).Find(&user)
 	if result.Error != nil {
@@ -18,9 +13,22 @@ func GetUserInfoById(id string) (UserInfo, error) {
 	}
 	return user, nil
 }
+
 func GetUserInfoByName(name string) (UserInfo, error) {
 	var user UserInfo
 	result := db.Table("user_info").Where("name = ?", name).Find(&user)
+	if result.Error != nil {
+		return user, result.Error
+	}
+	if result.RowsAffected == 0 {
+		return user, errors.New("user not exist")
+	}
+	return user, nil
+}
+
+func GetUserInfoByToken(token string) (UserInfo, error) {
+	var user UserInfo
+	result := db.Table("user_info").Where("token = ?", token).Find(&user)
 	if result.Error != nil {
 		return user, result.Error
 	}
@@ -43,7 +51,7 @@ func GetUserInfolist() ([]UserInfo, error) {
 }
 
 func CreateUserInfo(name, password string) error {
-	result := db.Table("user_info").Create(&UserInfo{Name: name, Password: password})
+	result := db.Table("user_info").Create(&UserInfo{Name: name, Password: password, Token: name + password})
 	if result.Error != nil {
 		return result.Error
 	}
@@ -51,4 +59,21 @@ func CreateUserInfo(name, password string) error {
 		return errors.New("user not exist")
 	}
 	return nil
+}
+
+func CheckLoginInfo(name, password string) (UserInfo, bool, string) {
+	var user UserInfo
+	result := db.Table("user_info").Where("name = ?", name).Find(&user)
+	if result.Error != nil {
+		return user, false, "请稍后重试"
+	}
+	if result.RowsAffected == 0 {
+		return user, false, "用户名的存在"
+	}
+	if user.Password == password {
+		return user, true, ""
+	} else {
+		return user, false, "密码错误"
+	}
+
 }

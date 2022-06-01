@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"path/filepath"
+	"strconv"
 
 	"github.com/RaymondCode/simple-demo/dao"
 	"github.com/gin-gonic/gin"
@@ -19,7 +20,7 @@ func Publish(c *gin.Context) {
 	token := c.PostForm("token")
 	title := c.PostForm("title")
 	fmt.Println(token)
-	if _, exist := UserIsExist(token, "", ""); !exist {
+	if _, exist := UserIsExist(token); !exist {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
 		return
 	}
@@ -62,11 +63,32 @@ func Publish(c *gin.Context) {
 
 // PublishList all users have same publish video list
 func PublishList(c *gin.Context) {
+	id, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusOK, VideoListResponse{
+			Response: Response{
+				StatusCode: 1,
+				StatusMsg:  err.Error(),
+			},
+			VideoList: nil,
+		})
+	}
+	videoInfoList, err := dao.GetVideoInfoListById(id)
+	videos := videoInfoListToVideoList(videoInfoList)
+	if err != nil {
+		c.JSON(http.StatusOK, VideoListResponse{
+			Response: Response{
+				StatusCode: 1,
+				StatusMsg:  err.Error(),
+			},
+			VideoList: nil,
+		})
+	}
 	c.JSON(http.StatusOK, VideoListResponse{
 		Response: Response{
 			StatusCode: 0,
 		},
-		VideoList: DemoVideos,
+		VideoList: videos,
 	})
 }
 

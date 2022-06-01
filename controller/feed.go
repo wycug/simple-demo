@@ -3,7 +3,6 @@ package controller
 import (
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/RaymondCode/simple-demo/dao"
@@ -53,7 +52,7 @@ func videoInfoListToVideoList(videoInfoList []dao.VideoInfo) []Video {
 	return videos
 }
 func videoInfoToVideo(videoInfo dao.VideoInfo) (Video, error) {
-	user, err := GetUserById(strconv.FormatInt(videoInfo.AuthorId, 10))
+	user, err := GetUserById(videoInfo.AuthorId)
 	if err != nil {
 		return Video{}, err
 	}
