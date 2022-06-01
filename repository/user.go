@@ -16,6 +16,7 @@ type User struct {
 	Password      string `gorm:"column:password"`
 	FollowCount   int64  `gorm:"column:follow_count"`
 	FollowerCount int64  `gorm:"column:follower_count"`
+	Token         string `gorm:"column:token"`
 }
 
 func (User) TableName() string {

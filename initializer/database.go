@@ -7,17 +7,18 @@ package initializer
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/RaymondCode/simple-demo/global"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
-	"time"
 )
 
 func InitDataBase() {
 	m := global.Config.Mysql
 	var dsn = fmt.Sprintf("%s:%s@%s", m.Username, m.Password, m.Url)
-	fmt.Println(dsn)
+	fmt.Println("dsn", dsn)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		NamingStrategy: schema.NamingStrategy{SingularTable: true},
 	})

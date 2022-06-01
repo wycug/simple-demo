@@ -13,7 +13,7 @@ import (
 
 type FavoriteActionListResponse struct {
 	Response
-	Videos []dao.VideoInfo
+	Videos []Video
 }
 
 type FavoriteActionListRequest struct {
@@ -58,6 +58,7 @@ func FavoriteAction(c *gin.Context) {
 func FavoriteList(c *gin.Context) {
 	token := c.Query("token")
 	userId := c.Query("user_id")
+	user_id, _ := strconv.ParseInt(userId, 10, 64)
 	if _, exist := UserIsExist(token); exist {
 		videos, err := dao.GetFavoriteList(userId)
 		if err != nil {
@@ -71,11 +72,12 @@ func FavoriteList(c *gin.Context) {
 			})
 			return
 		}
+		videoss := VideoInfoListToVideoList(videos, user_id)
 		c.JSON(http.StatusOK, FavoriteActionListResponse{
 			Response: Response{
 				StatusCode: 0,
 			},
-			Videos: videos,
+			Videos: videoss,
 		})
 	} else {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})

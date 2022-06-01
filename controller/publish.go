@@ -84,7 +84,7 @@ func PublishList(c *gin.Context) {
 		})
 	}
 	videoInfoList, err := dao.GetVideoInfoListById(id)
-	videos := videoInfoListToVideoList(videoInfoList)
+	videos := VideoInfoListToVideoList(videoInfoList, id)
 	if err != nil {
 		c.JSON(http.StatusOK, VideoListResponse{
 			Response: Response{

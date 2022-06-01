@@ -21,8 +21,9 @@ const MaxVideoNums int = 30
 func Feed(c *gin.Context) {
 	//可选参数
 	// lastTime := c.Query("latest_time")
-	// token := c.Query("token")
-
+	token := c.Query("token")
+	var user User
+	user, _ = UserIsExist(token)
 	videoInfoList, err := dao.GetVideoList(MaxVideoNums)
 	if err != nil {
 		c.JSON(http.StatusOK, FeedResponse{
@@ -31,7 +32,7 @@ func Feed(c *gin.Context) {
 			NextTime:  time.Now().Unix(),
 		})
 	}
-	videos := videoInfoListToVideoList(videoInfoList)
+	videos := VideoInfoListToVideoList(videoInfoList, user.Id)
 	c.JSON(http.StatusOK, FeedResponse{
 		Response:  Response{StatusCode: 0},
 		VideoList: videos,
@@ -39,10 +40,10 @@ func Feed(c *gin.Context) {
 	})
 }
 
-func videoInfoListToVideoList(videoInfoList []dao.VideoInfo) []Video {
+func VideoInfoListToVideoList(videoInfoList []dao.VideoInfo, user_id int64) []Video {
 	var videos []Video
 	for _, videoInfo := range videoInfoList {
-		video, err := videoInfoToVideo(videoInfo)
+		video, err := VideoInfoToVideo(videoInfo, user_id)
 		if err != nil {
 			log.Printf(err.Error())
 			continue
@@ -51,18 +52,16 @@ func videoInfoListToVideoList(videoInfoList []dao.VideoInfo) []Video {
 	}
 	return videos
 }
-func videoInfoToVideo(videoInfo dao.VideoInfo) (Video, error) {
-	user, err := GetUserById(videoInfo.AuthorId)
-	if err != nil {
-		return Video{}, err
-	}
+func VideoInfoToVideo(videoInfo dao.VideoInfo, user_id int64) (Video, error) {
+	author, _ := GetUserById(videoInfo.AuthorId)
 	return Video{
 		Id:            videoInfo.Id,
-		Author:        user,
+		Author:        author,
 		PlayUrl:       videoInfo.PlayUrl,
 		CoverUrl:      videoInfo.CoverUrl,
 		FavoriteCount: videoInfo.FavoriteCount,
 		CommentCount:  videoInfo.CommentCount,
+		IsFavorite:    dao.IsFavorite(user_id, videoInfo.Id),
 		Title:         videoInfo.Title,
 	}, nil
 }
