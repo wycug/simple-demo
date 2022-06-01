@@ -81,3 +81,23 @@ func FavoriteList(c *gin.Context) {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
 	}
 }
+
+// func CancelFavoriteActionAop(user User, params FavoriteActionListRequest) error {
+// 	BeforeUserCacheUpdateByToken(params.Token)
+// 	err := dao.FavoriteAction(strconv.FormatInt(user.Id, 10), params.VideoId)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	AfterUserCacheUpdateByToken(params.Token)
+// 	return nil
+// }
+
+// func FavoriteActionAop(user User, params FavoriteActionListRequest) error {
+// 	BeforeUserCacheUpdateByToken(params.Token)
+// 	err := dao.CancelFavoriteAction(params.UserId, params.VideoId)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	AfterUserCacheUpdateByToken(params.Token)
+// 	return nil
+// }

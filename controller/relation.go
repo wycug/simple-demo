@@ -48,7 +48,7 @@ func RelationAction(c *gin.Context) {
 
 		if actionType == constant.FOLLOW {
 			//关注操作
-			if _, err := followService.Follow(followFromID, followToID); err != nil {
+			if err := FollowAop(followFromID, followToID); err != nil {
 				c.JSON(http.StatusOK,
 					Response{
 						StatusCode: constant.FollowFailed,
@@ -58,7 +58,7 @@ func RelationAction(c *gin.Context) {
 			}
 		} else if actionType == constant.UNFOLLOW {
 			//取消关注操作
-			if _, err := followService.UnFollow(followFromID, followToID); err != nil {
+			if err := UnFollowAop(followFromID, followToID); err != nil {
 				c.JSON(http.StatusOK,
 					Response{
 						StatusCode: constant.UnfollowFailed,
@@ -210,4 +210,28 @@ func IsFollow(isFollow []int64, user User) bool {
 		}
 	}
 	return false
+}
+
+func FollowAop(followFromID, followToID int64) error {
+	BeforeUserCacheUpdateById(followFromID)
+	BeforeUserCacheUpdateById(followToID)
+	_, err := followService.Follow(followFromID, followToID)
+	if err != nil {
+		return err
+	}
+	AfterUserCacheUpdateById(followFromID)
+	AfterUserCacheUpdateById(followToID)
+	return nil
+}
+
+func UnFollowAop(followFromID, followToID int64) error {
+	BeforeUserCacheUpdateById(followFromID)
+	BeforeUserCacheUpdateById(followToID)
+	_, err := followService.UnFollow(followFromID, followToID)
+	if err != nil {
+		return err
+	}
+	AfterUserCacheUpdateById(followFromID)
+	AfterUserCacheUpdateById(followToID)
+	return nil
 }

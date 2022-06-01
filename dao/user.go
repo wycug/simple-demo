@@ -68,7 +68,7 @@ func CheckLoginInfo(name, password string) (UserInfo, bool, string) {
 		return user, false, "请稍后重试"
 	}
 	if result.RowsAffected == 0 {
-		return user, false, "用户名的存在"
+		return user, false, "用户名不存在"
 	}
 	if user.Password == password {
 		return user, true, ""
