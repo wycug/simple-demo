@@ -26,16 +26,16 @@ type FavoriteActionListRequest struct {
 
 // FavoriteAction no practical effect, just check if token is valid
 func FavoriteAction(c *gin.Context) {
-	var params FavoriteActionListRequest
-	err := c.BindQuery(&params)
-	//params.Token = c.Query("token")
-	//params.UserId = c.Query("user_id")
-	//params.VideoId = c.Query("video_id")
-	//params.ActionType = c.Query("action_type")
-	if err != nil {
-		log.Println("bind param fail, err =", err.Error())
-		return
-	}
+	var params *FavoriteActionListRequest
+	//err := c.BindQuery(&params)
+	params.Token = c.Query("token")
+	params.UserId = c.Query("user_id")
+	params.VideoId = c.Query("video_id")
+	params.ActionType = c.Query("action_type")
+	//if err != nil {
+	//	log.Println("bind param fail, err =", err.Error())
+	//	return
+	//}
 	fmt.Println(params)
 	if _, exist := UserIsExist(params.Token); exist {
 		if params.ActionType == "1" {
