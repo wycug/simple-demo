@@ -148,6 +148,6 @@ func userInfoToUser(userInfo dao.UserInfo) User {
 		Name:          userInfo.Name,
 		FollowCount:   userInfo.FollowCount,
 		FollowerCount: userInfo.FollowerCount,
-		IsFollow:      true,
+		IsFollow:      false,
 	}
 }

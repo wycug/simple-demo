@@ -6,10 +6,11 @@
 package service
 
 import (
+	"sync"
+
 	"github.com/RaymondCode/simple-demo/dao"
 	"github.com/RaymondCode/simple-demo/util/constant"
 	"github.com/RaymondCode/simple-demo/util/myError"
-	"sync"
 )
 
 type RelationService struct {

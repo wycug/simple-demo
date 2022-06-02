@@ -7,10 +7,11 @@ package dao
 
 import (
 	"fmt"
+	"sync"
+
 	"github.com/RaymondCode/simple-demo/global"
 	"github.com/RaymondCode/simple-demo/repository"
 	"gorm.io/gorm"
-	"sync"
 )
 
 type RelationDao struct {
@@ -71,4 +72,16 @@ func (d RelationDao) SearchFollowRelation(followFromId int64, followToId int64) 
 		return false, nil
 	}
 	return true, nil
+}
+
+func SearchFollowRelation(followFromId int64, followToId int64) bool {
+	// 查询关系中是否有 followFromId -> followToId, 返回满足followFromId -> followToId的数据集
+	//res := global.Db.Where("user_id = ? and follow_user_id = ?", followFromId, followToId).Find(&repository.FollowRelation{})
+
+	e := global.Db.Where("user_id = ? and follow_user_id = ?", followFromId, followToId).First(&repository.FollowRelation{}).Error
+	if e == gorm.ErrRecordNotFound {
+		fmt.Println("查询失败")
+		return false
+	}
+	return true
 }

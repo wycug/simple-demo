@@ -54,6 +54,7 @@ func VideoInfoListToVideoList(videoInfoList []dao.VideoInfo, user_id int64) []Vi
 }
 func VideoInfoToVideo(videoInfo dao.VideoInfo, user_id int64) (Video, error) {
 	author, _ := GetUserById(videoInfo.AuthorId)
+	author.IsFollow = dao.SearchFollowRelation(videoInfo.AuthorId, user_id)
 	return Video{
 		Id:            videoInfo.Id,
 		Author:        author,

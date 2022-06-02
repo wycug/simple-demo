@@ -64,6 +64,7 @@ func FavoriteList(c *gin.Context) {
 		if err != nil {
 			log.Println("get favorite list fail, err =", err.Error())
 			c.JSON(http.StatusOK, FavoriteActionListResponse{
+
 				Response: Response{
 					StatusCode: 1,
 					StatusMsg:  "get favorite list fail",
