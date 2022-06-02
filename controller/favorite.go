@@ -36,10 +36,10 @@ func FavoriteAction(c *gin.Context) {
 	//	log.Println("bind param fail, err =", err.Error())
 	//	return
 	//}
-	token := c.Param("token")
-	userId := c.Param("user_id")
-	videoId := c.Param("video_id")
-	actionType := c.Param("action_type")
+	token := c.Query("token")
+	userId := c.Query("user_id")
+	videoId := c.Query("video_id")
+	actionType := c.Query("action_type")
 	fmt.Println(token, userId, videoId, actionType)
 	if _, exist := UserIsExist(token); exist {
 		if actionType == "1" {
