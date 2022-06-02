@@ -17,3 +17,9 @@ func CreateVideoInfo(authorId int64, playUrl, coverUrl, title string) error {
 	}
 	return nil
 }
+
+func GetVideoInfoListById(authorId int64) ([]VideoInfo, error) {
+	var videoInfoList []VideoInfo
+	db.Table("video_info").Where("author_id = ?", authorId).Order("created_at desc").Find(&videoInfoList)
+	return videoInfoList, nil
+}

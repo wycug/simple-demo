@@ -2,7 +2,6 @@ package controller
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/RaymondCode/simple-demo/dao"
 	"github.com/gin-gonic/gin"
@@ -73,32 +72,23 @@ func Login(c *gin.Context) {
 	username := c.Query("username")
 	password := c.Query("password")
 
-	if userInfo, isLogin := dao.CheckLoginInfo(username, password); isLogin {
+	if userInfo, isLogin, errMsg := dao.CheckLoginInfo(username, password); isLogin {
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: Response{StatusCode: 0},
 			UserId:   userInfo.Id,
 			Token:    userInfo.Token,
 		})
-		return
+	} else {
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: Response{StatusCode: 1, StatusMsg: errMsg},
+		})
 	}
-
-	c.JSON(http.StatusOK, UserLoginResponse{
-		Response: Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
-	})
 
 }
 
 func UserInfo(c *gin.Context) {
-	user_id := c.Query("id")
 	token := c.Query("token")
-	id, _ := strconv.ParseInt(user_id, 10, 64)
 	if user, exist := UserIsExist(token); exist {
-		c.JSON(http.StatusOK, UserResponse{
-			Response: Response{StatusCode: 0},
-			User:     user,
-		})
-	} else if user, err := GetUserById(id); err != nil {
-		//暂时未处理点赞信息
 		c.JSON(http.StatusOK, UserResponse{
 			Response: Response{StatusCode: 0},
 			User:     user,
@@ -131,8 +121,8 @@ func GetUserById(id int64) (User, error) {
 	user = userInfoToUser(userInfo)
 
 	//等待读取点赞数据
-	user.FollowCount = 0
-	user.FollowerCount = 0
+	user.FollowCount = dao.GetFollowNumByID(user.Id)
+	user.FollowerCount = dao.GetFansNumByID(user.Id)
 
 	return user, nil
 }
@@ -146,8 +136,8 @@ func GetUserByToken(token string) (User, error) {
 	user = userInfoToUser(userInfo)
 
 	//等待读取点赞数据
-	user.FollowCount = 0
-	user.FollowerCount = 0
+	user.FollowCount = dao.GetFollowNumByID(user.Id)
+	user.FollowerCount = dao.GetFansNumByID(user.Id)
 
 	return user, nil
 }
