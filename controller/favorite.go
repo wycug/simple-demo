@@ -73,12 +73,11 @@ func FavoriteList(c *gin.Context) {
 			})
 			return
 		}
-		videoss := VideoInfoListToVideoList(videos, user_id)
 		c.JSON(http.StatusOK, FavoriteActionListResponse{
 			Response: Response{
 				StatusCode: 0,
 			},
-			Videos: videoss,
+			Videos: VideoInfoListToVideoList(videos, user_id),
 		})
 	} else {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
