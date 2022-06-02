@@ -1,7 +1,6 @@
 package dao
 
 import (
-	"errors"
 	"time"
 )
 
@@ -52,10 +51,7 @@ func Deletecomment(id int64) error {
 func List(videoID int64) ([]CommentInfo, error) {
 	var comments []CommentInfo
 	//Order按创建时间倒叙排序
-	result := db.Table("comment_info").Where("video_id = ?", videoID).Order("created_at desc").Find(&comments)
-	if result.RowsAffected == 0 {
-		return nil, errors.New("not exist video")
-	}
+	db.Table("comment_info").Where("video_id = ?", videoID).Order("created_at desc").Find(&comments)
 	return comments, nil
 }
 

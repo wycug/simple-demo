@@ -50,7 +50,7 @@ func FavoriteAction(userId, videoId string) error {
 func CancelFavoriteAction(userId, videoId string) error {
 	var favoriteInfo FavoriteInfo
 	var video VideoInfo
-	db.Table("favorite_info").Where("user_id = ? & video_id = ?", userId, videoId).First(&favoriteInfo)
+	db.Table("favorite_info").Where("user_id = ? and video_id = ?", userId, videoId).First(&favoriteInfo)
 	db.Table("video_info").Where("id = ?", videoId).Find(&video)
 	if favoriteInfo.IsFavorite == 0 {
 		return nil
@@ -60,4 +60,13 @@ func CancelFavoriteAction(userId, videoId string) error {
 	db.Table("favorite_info").Save(&favoriteInfo)
 	db.Table("video_info").Save(&video)
 	return nil
+}
+
+func IsFavorite(userId, videoId int64) bool {
+	var favoriteInfo FavoriteInfo
+	db.Table("favorite_info").Where("user_id = ? and video_id = ?", userId, videoId).First(&favoriteInfo)
+	if favoriteInfo.IsFavorite == 1 {
+		return true
+	}
+	return false
 }

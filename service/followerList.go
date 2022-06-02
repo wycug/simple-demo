@@ -8,8 +8,9 @@
 package service
 
 import (
-	"github.com/RaymondCode/simple-demo/util/myError"
 	"sync"
+
+	"github.com/RaymondCode/simple-demo/util/myError"
 
 	"github.com/RaymondCode/simple-demo/dao"
 	"github.com/RaymondCode/simple-demo/repository"
