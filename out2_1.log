@@ -1,0 +1,27 @@
+nohup: ignoring input
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+root:666666@tcp(106.13.196.236:3306)/douyin?charset=utf8&parseTime=True&loc=Local
+[GIN-debug] GET    /static/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (3 handlers)
+[GIN-debug] HEAD   /static/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (3 handlers)
+[GIN-debug] GET    /douyin/feed/             --> github.com/RaymondCode/simple-demo/controller.Feed (3 handlers)
+[GIN-debug] GET    /douyin/user/             --> github.com/RaymondCode/simple-demo/controller.UserInfo (3 handlers)
+[GIN-debug] POST   /douyin/user/register/    --> github.com/RaymondCode/simple-demo/controller.Register (3 handlers)
+[GIN-debug] POST   /douyin/user/login/       --> github.com/RaymondCode/simple-demo/controller.Login (3 handlers)
+[GIN-debug] POST   /douyin/publish/action/   --> github.com/RaymondCode/simple-demo/controller.Publish (3 handlers)
+[GIN-debug] GET    /douyin/publish/list/     --> github.com/RaymondCode/simple-demo/controller.PublishList (3 handlers)
+[GIN-debug] POST   /douyin/favorite/action/  --> github.com/RaymondCode/simple-demo/controller.FavoriteAction (3 handlers)
+[GIN-debug] GET    /douyin/favorite/list/    --> github.com/RaymondCode/simple-demo/controller.FavoriteList (3 handlers)
+[GIN-debug] POST   /douyin/comment/action/   --> github.com/RaymondCode/simple-demo/controller.CommentAction (3 handlers)
+[GIN-debug] GET    /douyin/comment/list/     --> github.com/RaymondCode/simple-demo/controller.CommentList (3 handlers)
+[GIN-debug] POST   /douyin/relation/action/  --> github.com/RaymondCode/simple-demo/controller.RelationAction (3 handlers)
+[GIN-debug] GET    /douyin/relation/follow/list/ --> github.com/RaymondCode/simple-demo/controller.FollowList (3 handlers)
+[GIN-debug] GET    /douyin/relation/follower/list/ --> github.com/RaymondCode/simple-demo/controller.FollowerList (3 handlers)
+[GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
+Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
+[GIN-debug] Listening and serving HTTP on :8082
+signal: killed

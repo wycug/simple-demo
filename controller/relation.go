@@ -24,7 +24,7 @@ var (
 func RelationAction(c *gin.Context) {
 	token := c.Query("token")
 
-	if _, exist := UserIsExist(token); exist {
+	if user, exist := UserIsExist(token); exist {
 		//判断操作类型 如果是关注则走关注的逻辑， 如果是取消关注则走取消关注的逻辑
 		actionType, err := strconv.ParseInt(c.Query("action_type"), 10, 64)
 		if err != nil {
@@ -35,17 +35,7 @@ func RelationAction(c *gin.Context) {
 				})
 			return
 		}
-
-		//获取关注者和被关注者的id
-		followFromID, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
-		if err != nil {
-			c.JSON(http.StatusOK,
-				Response{
-					StatusCode: constant.RequestParamError,
-					StatusMsg:  err.Error(),
-				})
-			return
-		}
+		followFromID := user.Id
 		followToID, err := strconv.ParseInt(c.Query("to_user_id"), 10, 64)
 		if err != nil {
 			c.JSON(http.StatusOK,
@@ -58,7 +48,7 @@ func RelationAction(c *gin.Context) {
 
 		if actionType == constant.FOLLOW {
 			//关注操作
-			if _, err := followService.Follow(followFromID, followToID); err != nil {
+			if err := FollowAop(followFromID, followToID); err != nil {
 				c.JSON(http.StatusOK,
 					Response{
 						StatusCode: constant.FollowFailed,
@@ -68,7 +58,7 @@ func RelationAction(c *gin.Context) {
 			}
 		} else if actionType == constant.UNFOLLOW {
 			//取消关注操作
-			if _, err := followService.UnFollow(followFromID, followToID); err != nil {
+			if err := UnFollowAop(followFromID, followToID); err != nil {
 				c.JSON(http.StatusOK,
 					Response{
 						StatusCode: constant.UnfollowFailed,
@@ -220,4 +210,28 @@ func IsFollow(isFollow []int64, user User) bool {
 		}
 	}
 	return false
+}
+
+func FollowAop(followFromID, followToID int64) error {
+	BeforeUserCacheUpdateById(followFromID)
+	BeforeUserCacheUpdateById(followToID)
+	_, err := followService.Follow(followFromID, followToID)
+	if err != nil {
+		return err
+	}
+	AfterUserCacheUpdateById(followFromID)
+	AfterUserCacheUpdateById(followToID)
+	return nil
+}
+
+func UnFollowAop(followFromID, followToID int64) error {
+	BeforeUserCacheUpdateById(followFromID)
+	BeforeUserCacheUpdateById(followToID)
+	_, err := followService.UnFollow(followFromID, followToID)
+	if err != nil {
+		return err
+	}
+	AfterUserCacheUpdateById(followFromID)
+	AfterUserCacheUpdateById(followToID)
+	return nil
 }

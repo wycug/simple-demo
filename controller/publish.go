@@ -3,6 +3,7 @@ package controller
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strconv"
 
@@ -35,6 +36,15 @@ func Publish(c *gin.Context) {
 	filename := filepath.Base(data.Filename)
 	user := usersLoginInfo[token]
 	finalName := fmt.Sprintf("%d_%s", user.Id, filename)
+	i := 1
+	//绝对路径
+	path := "./public/" + filename
+	//判断文件名是否存在，如果存在name前加i，i++
+	if flag, _ := PathExists(path); flag {
+		finalName = strconv.Itoa(i) + finalName
+		i++
+		fmt.Println("存在")
+	}
 	saveFile := filepath.Join("./public/", finalName)
 	if err := c.SaveUploadedFile(data, saveFile); err != nil {
 		c.JSON(http.StatusOK, Response{
@@ -92,3 +102,15 @@ func PublishList(c *gin.Context) {
 	})
 }
 
+
+// PathExists 判断文件是否存在，如果存在返回true，不存在返回false
+func PathExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
+}

@@ -121,8 +121,8 @@ func GetUserById(id int64) (User, error) {
 	user = userInfoToUser(userInfo)
 
 	//等待读取点赞数据
-	user.FollowCount = 0
-	user.FollowerCount = 0
+	user.FollowCount = dao.GetFollowNumByID(user.Id)
+	user.FollowerCount = dao.GetFansNumByID(user.Id)
 
 	return user, nil
 }
@@ -136,8 +136,8 @@ func GetUserByToken(token string) (User, error) {
 	user = userInfoToUser(userInfo)
 
 	//等待读取点赞数据
-	user.FollowCount = 0
-	user.FollowerCount = 0
+	user.FollowCount = dao.GetFollowNumByID(user.Id)
+	user.FollowerCount = dao.GetFansNumByID(user.Id)
 
 	return user, nil
 }
