@@ -13,7 +13,7 @@ import (
 
 type FavoriteActionListResponse struct {
 	Response
-	Videos []Video
+	Videos []Video `json:"video_list"`
 }
 
 type FavoriteActionListRequest struct {
