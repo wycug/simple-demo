@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -17,23 +18,24 @@ type FavoriteActionListResponse struct {
 }
 
 type FavoriteActionListRequest struct {
-	Token      string `form:"token"`
-	UserId     string `form:"user_id"`
-	VideoId    string `form:"video_id"`
-	ActionType string `form:"action_type"`
+	Token      string `json:"token"`
+	UserId     string `json:"user_id"`
+	VideoId    string `json:"video_id"`
+	ActionType string `json:"action_type"`
 }
 
 // FavoriteAction no practical effect, just check if token is valid
 func FavoriteAction(c *gin.Context) {
 	var params FavoriteActionListRequest
-	err := c.BindQuery(&params)
+	err := c.BindJSON(&params)
 	if err != nil {
 		log.Println("bind param fail, err =", err.Error())
 		return
 	}
-	if user, exist := UserIsExist(params.Token); exist {
+	fmt.Println(params)
+	if _, exist := UserIsExist(params.Token); exist {
 		if params.ActionType == "1" {
-			err := dao.FavoriteAction(strconv.FormatInt(user.Id, 10), params.VideoId)
+			err := dao.FavoriteAction(params.UserId, params.VideoId)
 			if err != nil {
 				return
 			}
@@ -41,6 +43,7 @@ func FavoriteAction(c *gin.Context) {
 		} else if params.ActionType == "2" {
 			err := dao.CancelFavoriteAction(params.UserId, params.VideoId)
 			if err != nil {
+				log.Println("cancel favorite video fail, err =", err.Error())
 				return
 			}
 			c.JSON(http.StatusOK, Response{StatusCode: 0, StatusMsg: "cancel favorite action success"})
