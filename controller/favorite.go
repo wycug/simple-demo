@@ -13,7 +13,7 @@ import (
 
 type FavoriteActionListResponse struct {
 	Response
-	Videos []dao.VideoInfo
+	Videos []Video
 }
 
 type FavoriteActionListRequest struct {
@@ -25,19 +25,13 @@ type FavoriteActionListRequest struct {
 
 // FavoriteAction no practical effect, just check if token is valid
 func FavoriteAction(c *gin.Context) {
-	// token := c.Param("token")
-	// userId := c.Param("user_id")
-	// videoId := c.Param("video_id")
-	// actionType := c.Param("action_type")
-
 	var params FavoriteActionListRequest
-	c.BindQuery(&params)
-	//fmt.Println(params)
-<<<<<<< HEAD
-	if _, exist := UserIsExist(params.Token); exist {
-=======
+	err := c.BindQuery(&params)
+	if err != nil {
+		log.Println("bind param fail, err =", err.Error())
+		return
+	}
 	if user, exist := UserIsExist(params.Token); exist {
->>>>>>> master
 		if params.ActionType == "1" {
 			err := dao.FavoriteAction(strconv.FormatInt(user.Id, 10), params.VideoId)
 			if err != nil {
@@ -75,14 +69,41 @@ func FavoriteList(c *gin.Context) {
 			})
 			return
 		}
+		id, _ := strconv.ParseInt(userId, 10, 64)
+		res := make([]Video, 0)
+		for i := 0; i < len(videos); i++ {
+			tmp := VideoInfo2Video(videos[i], id)
+			res = append(res, tmp)
+		}
 		c.JSON(http.StatusOK, FavoriteActionListResponse{
 			Response: Response{
 				StatusCode: 0,
+				StatusMsg:  "get favorite video success",
 			},
-			Videos: videos,
+			Videos: res,
 		})
 	} else {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
+	}
+}
+
+func VideoInfo2Video(video dao.VideoInfo, userId int64) Video {
+	userInfo, _ := dao.GetUserInfoById(userId)
+	return Video{
+		Id: video.Id,
+		Author: User{
+			Id:            userId,
+			Name:          userInfo.Name,
+			FollowCount:   userInfo.FollowCount,
+			FollowerCount: userInfo.FollowerCount,
+			IsFollow:      userInfo.IsFollow,
+		},
+		PlayUrl:       video.PlayUrl,
+		CoverUrl:      video.CoverUrl,
+		FavoriteCount: video.FavoriteCount,
+		CommentCount:  video.CommentCount,
+		IsFavorite:    true,
+		Title:         video.Title,
 	}
 }
 
