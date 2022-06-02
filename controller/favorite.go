@@ -28,10 +28,10 @@ type FavoriteActionListRequest struct {
 func FavoriteAction(c *gin.Context) {
 	var params *FavoriteActionListRequest
 	//err := c.BindQuery(&params)
-	params.Token = c.Query("token")
-	params.UserId = c.Query("user_id")
-	params.VideoId = c.Query("video_id")
-	params.ActionType = c.Query("action_type")
+	params.Token = c.Param("token")
+	params.UserId = c.Param("user_id")
+	params.VideoId = c.Param("video_id")
+	params.ActionType = c.Param("action_type")
 	//if err != nil {
 	//	log.Println("bind param fail, err =", err.Error())
 	//	return
