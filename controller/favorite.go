@@ -27,7 +27,7 @@ type FavoriteActionListRequest struct {
 // FavoriteAction no practical effect, just check if token is valid
 func FavoriteAction(c *gin.Context) {
 	var params FavoriteActionListRequest
-	err := c.BindJSON(&params)
+	err := c.Bind(&params)
 	if err != nil {
 		log.Println("bind param fail, err =", err.Error())
 		return
