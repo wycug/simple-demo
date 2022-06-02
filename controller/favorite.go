@@ -1,11 +1,15 @@
 package controller
 
 import (
-	"github.com/RaymondCode/simple-demo/dao"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"strconv"
+
+	"github.com/RaymondCode/simple-demo/dao"
+	"github.com/gin-gonic/gin"
 )
+
+// FavoriteAction no practical effect, just check if token is valid
 
 type FavoriteActionListResponse struct {
 	Response
@@ -13,19 +17,25 @@ type FavoriteActionListResponse struct {
 }
 
 type FavoriteActionListRequest struct {
-	Token      string `json:"token"`
-	UserId     string `json:"user_id"`
-	VideoId    string `json:"video_id"`
-	ActionType string `json:"action_type"`
+	Token      string `form:"token"`
+	UserId     string `form:"user_id"`
+	VideoId    string `form:"video_id"`
+	ActionType string `form:"action_type"`
 }
 
 // FavoriteAction no practical effect, just check if token is valid
 func FavoriteAction(c *gin.Context) {
+	// token := c.Param("token")
+	// userId := c.Param("user_id")
+	// videoId := c.Param("video_id")
+	// actionType := c.Param("action_type")
+
 	var params FavoriteActionListRequest
-	c.BindJSON(&params)
-	if _, exist := usersLoginInfo[params.Token]; exist {
+	c.BindQuery(&params)
+	//fmt.Println(params)
+	if user, exist := UserIsExist(params.Token); exist {
 		if params.ActionType == "1" {
-			err := dao.FavoriteAction(params.UserId, params.VideoId)
+			err := dao.FavoriteAction(strconv.FormatInt(user.Id, 10), params.VideoId)
 			if err != nil {
 				return
 			}
@@ -71,3 +81,23 @@ func FavoriteList(c *gin.Context) {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
 	}
 }
+
+// func CancelFavoriteActionAop(user User, params FavoriteActionListRequest) error {
+// 	BeforeUserCacheUpdateByToken(params.Token)
+// 	err := dao.FavoriteAction(strconv.FormatInt(user.Id, 10), params.VideoId)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	AfterUserCacheUpdateByToken(params.Token)
+// 	return nil
+// }
+
+// func FavoriteActionAop(user User, params FavoriteActionListRequest) error {
+// 	BeforeUserCacheUpdateByToken(params.Token)
+// 	err := dao.CancelFavoriteAction(params.UserId, params.VideoId)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	AfterUserCacheUpdateByToken(params.Token)
+// 	return nil
+// }
