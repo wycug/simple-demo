@@ -26,26 +26,30 @@ type FavoriteActionListRequest struct {
 
 // FavoriteAction no practical effect, just check if token is valid
 func FavoriteAction(c *gin.Context) {
-	var params *FavoriteActionListRequest
-	err := c.BindQuery(params)
+	//var params *FavoriteActionListRequest
+	//err := c.BindQuery(params)
 	//params.Token = c.Param("token")
 	//params.UserId = c.Param("user_id")
 	//params.VideoId = c.Param("video_id")
 	//params.ActionType = c.Param("action_type")
-	if err != nil {
-		log.Println("bind param fail, err =", err.Error())
-		return
-	}
-	fmt.Println(params)
-	if _, exist := UserIsExist(params.Token); exist {
-		if params.ActionType == "1" {
-			err := dao.FavoriteAction(params.UserId, params.VideoId)
+	//if err != nil {
+	//	log.Println("bind param fail, err =", err.Error())
+	//	return
+	//}
+	token := c.Param("token")
+	userId := c.Param("user_id")
+	videoId := c.Param("video_id")
+	actionType := c.Param("action_type")
+	fmt.Println(token, userId, videoId, actionType)
+	if _, exist := UserIsExist(token); exist {
+		if actionType == "1" {
+			err := dao.FavoriteAction(userId, videoId)
 			if err != nil {
 				return
 			}
 			c.JSON(http.StatusOK, Response{StatusCode: 0, StatusMsg: "favorite action success"})
-		} else if params.ActionType == "2" {
-			err := dao.CancelFavoriteAction(params.UserId, params.VideoId)
+		} else if actionType == "2" {
+			err := dao.CancelFavoriteAction(userId, videoId)
 			if err != nil {
 				log.Println("cancel favorite video fail, err =", err.Error())
 				return
