@@ -21,3 +21,8 @@
 go.work
 
 .idea
+go.sum
+.gitignore
+go.mod
+main.go
+*.log
