@@ -1,5 +1,12 @@
 package controller
 
+var URL string = ""
+var PORT string = ""
+var GROUPPATH string = ""
+var STATICPATH string = ""
+
+//定义返回的前端数据
+
 type Response struct {
 	StatusCode int32  `json:"status_code"`
 	StatusMsg  string `json:"status_msg,omitempty"`
@@ -13,6 +20,7 @@ type Video struct {
 	FavoriteCount int64  `json:"favorite_count,omitempty"`
 	CommentCount  int64  `json:"comment_count,omitempty"`
 	IsFavorite    bool   `json:"is_favorite,omitempty"`
+	Title         string `json:"title,omitempty"`
 }
 
 type Comment struct {

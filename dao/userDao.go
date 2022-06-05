@@ -6,6 +6,7 @@
 package dao
 
 import (
+	"github.com/RaymondCode/simple-demo/global"
 	"github.com/RaymondCode/simple-demo/repository"
 	"github.com/RaymondCode/simple-demo/util/constant"
 	"github.com/RaymondCode/simple-demo/util/myError"
@@ -40,7 +41,7 @@ func (d UserDao) FansNumChange(userId int64, opt int64) error {
 	}
 
 	//写数据库
-	if err := dao.db.Model(&repository.User{ID: userId}).Update("follower_count", followerCount).Error; err != nil {
+	if err := global.Db.Model(&repository.User{ID: userId}).Update("follower_count", followerCount).Error; err != nil {
 		return err
 	}
 
@@ -51,7 +52,7 @@ func GetFansNumByID(userId int64) int64 {
 	user := &repository.User{
 		ID: userId,
 	}
-	dao.db.Where("id = ?", userId).Debug().First(&user)
+	global.Db.Where("id = ?", userId).Debug().First(&user)
 
 	return user.FollowerCount
 }
@@ -68,7 +69,7 @@ func (d UserDao) FollowNumChange(userId int64, opt int64) error {
 		return myError.NewError(constant.OptParameterError, constant.Msg(constant.OptParameterError))
 	}
 	//写数据库
-	if err := dao.db.Model(&repository.User{ID: userId}).Update("follow_count", followCount).Error; err != nil {
+	if err := global.Db.Model(&repository.User{ID: userId}).Update("follow_count", followCount).Error; err != nil {
 		return err
 	}
 
@@ -79,7 +80,7 @@ func GetFollowNumByID(userId int64) int64 {
 	user := &repository.User{
 		ID: userId,
 	}
-	dao.db.Where("id = ?", userId).Debug().First(&user)
+	global.Db.Where("id = ?", userId).Debug().First(&user)
 
 	return user.FollowCount
 }

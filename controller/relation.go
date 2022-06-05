@@ -1,11 +1,12 @@
 package controller
 
 import (
+	"net/http"
+	"strconv"
+
 	"github.com/RaymondCode/simple-demo/service"
 	"github.com/RaymondCode/simple-demo/util/constant"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"strconv"
 )
 
 type UserListResponse struct {
@@ -34,18 +35,7 @@ func RelationAction(c *gin.Context) {
 				})
 			return
 		}
-
-		//获取关注者和被关注者的id
-		followFromID := user.ID
-		//followFromID, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
-		//if err != nil {
-		//	c.JSON(http.StatusOK,
-		//		Response{
-		//			StatusCode: constant.RequestParamError,
-		//			StatusMsg:  err.Error(),
-		//		})
-		//	return
-		//}
+		followFromID := user.Id
 		followToID, err := strconv.ParseInt(c.Query("to_user_id"), 10, 64)
 		if err != nil {
 			c.JSON(http.StatusOK,
@@ -58,7 +48,7 @@ func RelationAction(c *gin.Context) {
 
 		if actionType == constant.FOLLOW {
 			//关注操作
-			if _, err := followService.Follow(followFromID, followToID); err != nil {
+			if err := FollowAop(followFromID, followToID); err != nil {
 				c.JSON(http.StatusOK,
 					Response{
 						StatusCode: constant.FollowFailed,
@@ -68,7 +58,7 @@ func RelationAction(c *gin.Context) {
 			}
 		} else if actionType == constant.UNFOLLOW {
 			//取消关注操作
-			if _, err := followService.UnFollow(followFromID, followToID); err != nil {
+			if err := UnFollowAop(followFromID, followToID); err != nil {
 				c.JSON(http.StatusOK,
 					Response{
 						StatusCode: constant.UnfollowFailed,
@@ -102,21 +92,12 @@ func RelationAction(c *gin.Context) {
 //  关注列表
 func FollowList(c *gin.Context) {
 	token := c.Query("token")
-	//
-	if _, exist := UserIsExist(token); exist {
+
+	if user, exist := UserIsExist(token); exist {
 		// 调用Service层里的获取关注列表函数
 		// 获取用户id
-		user_id, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
-		if err != nil {
-			c.JSON(http.StatusOK,
-				Response{
-					StatusCode: constant.RequestParamError,
-					StatusMsg:  err.Error(),
-				})
-			return
-		}
-
-		followInfo, _, _, err := followListService.FollowerList(user_id, constant.FOLLOWLIST)
+		userId := user.Id
+		followInfo, _, _, err := followListService.FollowerList(userId, constant.FOLLOWLIST)
 		if err != nil {
 			c.JSON(http.StatusOK,
 				Response{
@@ -160,19 +141,11 @@ func FollowList(c *gin.Context) {
 // FollowerList all users have same follower list
 func FollowerList(c *gin.Context) {
 	token := c.Query("token")
-	//
-	if _, exist := UserIsExist(token); exist {
+
+	if user, exist := UserIsExist(token); exist {
 		// 	调用Service层里的获取粉丝列表函数
 		// 获取用户id
-		userId, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
-		if err != nil {
-			c.JSON(http.StatusOK,
-				Response{
-					StatusCode: constant.RequestParamError,
-					StatusMsg:  err.Error(),
-				})
-			return
-		}
+		userId := user.Id
 		followerInfo, _, isFollow, err := followListService.FollowerList(userId, constant.FANSLIST)
 		if err != nil {
 			c.JSON(http.StatusOK,
@@ -220,4 +193,28 @@ func IsFollow(isFollow []int64, user User) bool {
 		}
 	}
 	return false
+}
+
+func FollowAop(followFromID, followToID int64) error {
+	BeforeUserCacheUpdateById(followFromID)
+	BeforeUserCacheUpdateById(followToID)
+	_, err := followService.Follow(followFromID, followToID)
+	if err != nil {
+		return err
+	}
+	AfterUserCacheUpdateById(followFromID)
+	AfterUserCacheUpdateById(followToID)
+	return nil
+}
+
+func UnFollowAop(followFromID, followToID int64) error {
+	BeforeUserCacheUpdateById(followFromID)
+	BeforeUserCacheUpdateById(followToID)
+	_, err := followService.UnFollow(followFromID, followToID)
+	if err != nil {
+		return err
+	}
+	AfterUserCacheUpdateById(followFromID)
+	AfterUserCacheUpdateById(followToID)
+	return nil
 }

@@ -11,6 +11,15 @@ import (
 	"testing"
 )
 
+//func TestGetFollowRelation(t *testing.T) {
+//	initializer.InitConfig()
+//	initializer.InitDataBase()
+//	relationDao := NewRelationDaoInstance()
+//	output := len(relationDao.GetFollowRelation())
+//	expectOutput := 0
+//	assert.Equal(t, output, expectOutput)
+//}
+
 func TestRelationDao_AddFollowRelation(t *testing.T) {
 	initializer.InitConfig()
 	initializer.InitDataBase()

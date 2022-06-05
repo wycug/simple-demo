@@ -7,6 +7,7 @@ package initializer
 
 import (
 	"fmt"
+
 	"github.com/RaymondCode/simple-demo/global"
 	"github.com/spf13/viper"
 )

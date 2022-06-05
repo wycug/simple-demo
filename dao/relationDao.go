@@ -7,6 +7,7 @@ package dao
 
 import (
 	"fmt"
+	"github.com/RaymondCode/simple-demo/global"
 	"github.com/RaymondCode/simple-demo/repository"
 	"gorm.io/gorm"
 	"sync"
@@ -36,9 +37,7 @@ func (d RelationDao) AddFollowRelation(followFromId int64, followToId int64) (st
 		FollowToID:   followToId,
 	}
 	//插入关注关系
-	if err := dao.db.Select("FollowFromID", "FollowToID").Create(followRelation).Error; err != nil {
-		return "Add Follow Relation Error", err
-	}
+	global.Db.Select("FollowFromID", "FollowToID").Create(followRelation)
 
 	return "success", nil
 }
@@ -47,18 +46,18 @@ func (d RelationDao) AddFollowRelation(followFromId int64, followToId int64) (st
 
 func (d RelationDao) RemoveFollowRelation(followFromId int64, followToId int64) (string, error) {
 	// 封装关注关系
-	if err := dao.db.Where("user_id = ? and follow_user_id = ?", followFromId, followToId).Delete(&repository.FollowRelation{}).Error; err != nil {
-		return "Remove Follow Relation Error", err
-	}
+	global.Db.Where("user_id = ? and follow_user_id = ?",
+		followFromId, followToId).Delete(&repository.FollowRelation{})
 
 	return "success", nil
 }
 
+// 获取关注关系
+
 func (d RelationDao) SearchFollowRelation(followFromId int64, followToId int64) (bool, error) {
 	// 查询关系中是否有 followFromId -> followToId, 返回满足followFromId -> followToId的数据集
-	//res := global.Db.Where("user_id = ? and follow_user_id = ?", followFromId, followToId).Find(&repository.FollowRelation{})
-
-	e := dao.db.Where("user_id = ? and follow_user_id = ?", followFromId, followToId).First(&repository.FollowRelation{}).Error
+	e := global.Db.Where("user_id = ? and follow_user_id = ?",
+		followFromId, followToId).First(&repository.FollowRelation{}).Error
 	if e == gorm.ErrRecordNotFound {
 		fmt.Println("查询失败")
 		return false, nil
