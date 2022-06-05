@@ -12,11 +12,11 @@ import (
 	"github.com/magiconair/properties/assert"
 )
 
-func TestFollowDao_FollowList(t *testing.T) {
+func TestFollowDao_GetFollowListRedis(t *testing.T) {
 	initializer.InitConfig()
-	initializer.InitDataBase()
+	initializer.InitRedis()
 	followDao := NewFollowDaoInstance()
-	output, _ := followDao.GetFollowList(17)
+	output, _ := followDao.GetFollowList(1)
 	// （t,真实长度，期望的长度）
 	assert.Equal(t, len(output), 3)
 }

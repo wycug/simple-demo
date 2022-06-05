@@ -11,3 +11,9 @@ mysql:
   maxIdleConns: 10
   maxOpenConns: 100
   connMaxLifetime: 1440
+
+# Redis配置
+redis:
+  addr: localhost:6379
+  #  password: 123456
+  db: 0
