@@ -6,6 +6,7 @@
 package dao
 
 import (
+	"fmt"
 	"sync"
 
 	"github.com/RaymondCode/simple-demo/global"
@@ -32,23 +33,22 @@ func NewFollowerDaoInstance() *FollowerDao {
 // 2、用户id 作为user_id 字段，找所有相关的follow_id数据
 
 // 自己的粉丝列表：把自己的id作为follow_user_id传入，读取所有相关的条目
-func (f FollowerDao) GetFollowerList(userID int64) ([]int64, error) {
-	// 找到所有和userID对应的条目
-	var followRelations []*repository.FollowRelation
-	if err := global.Db.Where("follow_user_id = ?", userID).Find(&followRelations).Error; err != nil {
-		return nil, err
-	}
 
-	// 获取list的长度，声明对应长度的数组
-	n := len(followRelations)
-	followRes := make([]int64, n)
+func (f FollowerDao) GetFollowerList(userID int64) ([]string, error) {
+	key := fmt.Sprintf("t%v:fanslist", userID)
+	return global.Rdb.SMembers(ctx, key).Result()
+}
 
-	// FollowFromID: A关注B
-	for i := 0; i < n; i++ {
-		followRes[i] = followRelations[i].FollowFromID
-	}
+func (f FollowerDao) GetNoneFollow(userID int64) ([]string, error) {
+	key1 := fmt.Sprintf("%v:fanslist", userID)
+	key2 := fmt.Sprintf("%v:followlist", userID)
+	return global.Rdb.SDiff(ctx, key1, key2).Result()
+}
 
-	return followRes, nil
+func (f FollowerDao) GetIsFollow(userID int64) ([]string, error) {
+	key1 := fmt.Sprintf("%v:fanslist", userID)
+	key2 := fmt.Sprintf("%v:followlist", userID)
+	return global.Rdb.SInter(ctx, key1, key2).Result()
 }
 
 // 根据粉丝的id找到粉丝的信息

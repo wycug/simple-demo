@@ -92,21 +92,12 @@ func RelationAction(c *gin.Context) {
 //  关注列表
 func FollowList(c *gin.Context) {
 	token := c.Query("token")
-	//
-	if _, exist := UserIsExist(token); exist {
+
+	if user, exist := UserIsExist(token); exist {
 		// 调用Service层里的获取关注列表函数
 		// 获取用户id
-		user_id, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
-		if err != nil {
-			c.JSON(http.StatusOK,
-				Response{
-					StatusCode: constant.RequestParamError,
-					StatusMsg:  err.Error(),
-				})
-			return
-		}
-
-		followInfo, _, _, err := followListService.FollowerList(user_id, constant.FOLLOWLIST)
+		userId := user.Id
+		followInfo, _, _, err := followListService.FollowerList(userId, constant.FOLLOWLIST)
 		if err != nil {
 			c.JSON(http.StatusOK,
 				Response{
@@ -150,19 +141,11 @@ func FollowList(c *gin.Context) {
 // FollowerList all users have same follower list
 func FollowerList(c *gin.Context) {
 	token := c.Query("token")
-	//
-	if _, exist := UserIsExist(token); exist {
+
+	if user, exist := UserIsExist(token); exist {
 		// 	调用Service层里的获取粉丝列表函数
 		// 获取用户id
-		userId, err := strconv.ParseInt(c.Query("user_id"), 10, 64)
-		if err != nil {
-			c.JSON(http.StatusOK,
-				Response{
-					StatusCode: constant.RequestParamError,
-					StatusMsg:  err.Error(),
-				})
-			return
-		}
+		userId := user.Id
 		followerInfo, _, isFollow, err := followListService.FollowerList(userId, constant.FANSLIST)
 		if err != nil {
 			c.JSON(http.StatusOK,

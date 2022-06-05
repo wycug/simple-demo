@@ -14,7 +14,7 @@ type DYError struct {
 }
 
 func (e *DYError) Error() string {
-	return fmt.Sprintf("%d: %s", e.ErrorCode, e.Description)
+	return fmt.Sprintf("Error code %d: %s", e.ErrorCode, e.Description)
 }
 
 // NewError 新建错误结构体
