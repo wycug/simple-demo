@@ -41,15 +41,15 @@ func FavoriteAction(c *gin.Context) {
 	videoId := c.Query("video_id")
 	actionType := c.Query("action_type")
 	fmt.Println(token, userId, videoId, actionType)
-	if _, exist := UserIsExist(token); exist {
+	if user, exist := UserIsExist(token); exist {
 		if actionType == "1" {
-			err := dao.FavoriteAction(userId, videoId)
+			err := dao.FavoriteAction(strconv.FormatInt(user.Id, 10), videoId)
 			if err != nil {
 				return
 			}
 			c.JSON(http.StatusOK, Response{StatusCode: 0, StatusMsg: "favorite action success"})
 		} else if actionType == "2" {
-			err := dao.CancelFavoriteAction(userId, videoId)
+			err := dao.CancelFavoriteAction(strconv.FormatInt(user.Id, 10), videoId)
 			if err != nil {
 				log.Println("cancel favorite video fail, err =", err.Error())
 				return
