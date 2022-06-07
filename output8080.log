@@ -1,0 +1,280 @@
+nohup: ignoring input
+[GIN-debug] [WARNING] Creating an Engine instance with the Logger and Recovery middleware already attached.
+
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+dsn root:666666@tcp(127.0.0.1:3306)/douyin?charset=utf8&parseTime=True&loc=Local
+[GIN-debug] GET    /static/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (3 handlers)
+[GIN-debug] HEAD   /static/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (3 handlers)
+[GIN-debug] GET    /douyin/feed/             --> github.com/RaymondCode/simple-demo/controller.Feed (3 handlers)
+[GIN-debug] GET    /douyin/user/             --> github.com/RaymondCode/simple-demo/controller.UserInfo (3 handlers)
+[GIN-debug] POST   /douyin/user/register/    --> github.com/RaymondCode/simple-demo/controller.Register (3 handlers)
+[GIN-debug] POST   /douyin/user/login/       --> github.com/RaymondCode/simple-demo/controller.Login (3 handlers)
+[GIN-debug] POST   /douyin/publish/action/   --> github.com/RaymondCode/simple-demo/controller.Publish (3 handlers)
+[GIN-debug] GET    /douyin/publish/list/     --> github.com/RaymondCode/simple-demo/controller.PublishList (3 handlers)
+[GIN-debug] POST   /douyin/favorite/action/  --> github.com/RaymondCode/simple-demo/controller.FavoriteAction (3 handlers)
+[GIN-debug] GET    /douyin/favorite/list/    --> github.com/RaymondCode/simple-demo/controller.FavoriteList (3 handlers)
+[GIN-debug] POST   /douyin/comment/action/   --> github.com/RaymondCode/simple-demo/controller.CommentAction (3 handlers)
+[GIN-debug] GET    /douyin/comment/list/     --> github.com/RaymondCode/simple-demo/controller.CommentList (3 handlers)
+[GIN-debug] POST   /douyin/relation/action/  --> github.com/RaymondCode/simple-demo/controller.RelationAction (3 handlers)
+[GIN-debug] GET    /douyin/relation/follow/list/ --> github.com/RaymondCode/simple-demo/controller.FollowList (3 handlers)
+[GIN-debug] GET    /douyin/relation/follower/list/ --> github.com/RaymondCode/simple-demo/controller.FollowerList (3 handlers)
+[GIN-debug] [WARNING] You trusted all proxies, this is NOT safe. We recommend you to set a value.
+Please check https://pkg.go.dev/github.com/gin-gonic/gin#readme-don-t-trust-all-proxies for details.
+[GIN-debug] Listening and serving HTTP on :8080
+[GIN] 2022/06/07 - 13:54:59 | 200 |   1.22961094s | 171.113.227.149 | GET      "/static/1_0_bear.mp4"
+
+2022/06/07 13:54:59 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.631ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:54:59 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[1.320ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+[GIN] 2022/06/07 - 13:54:59 | 200 |    7.480327ms | 171.113.227.149 | GET      "/douyin/favorite/list/?token=wy666666&user_id=1"
+
+2022/06/07 13:54:59 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[1.369ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:54:59 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[1.165ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:54:59 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[4.039ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:54:59 | 200 |   15.697091ms | 171.113.227.149 | GET      "/douyin/publish/list/?token=wy666666&user_id=1"
+[GIN-debug] redirecting request 301: /douyin/feed/ --> /douyin/feed/?latest_time=1654579945&token=wy666666
+
+2022/06/07 13:55:05 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.563ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:05 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[0.533ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:05 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[1.331ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:55:05 | 200 |    4.905424ms | 171.113.227.149 | GET      "/douyin/feed/?latest_time=1654579945&token=wy666666"
+
+2022/06/07 13:55:05 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.554ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+[GIN] 2022/06/07 - 13:55:05 | 200 |    2.472098ms | 171.113.227.149 | GET      "/douyin/favorite/list/?token=wy666666&user_id=1"
+
+2022/06/07 13:55:05 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[4.279ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:05 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[1.821ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:55:05 | 200 |   17.394181ms | 171.113.227.149 | GET      "/douyin/publish/list/?token=wy666666&user_id=1"
+[GIN-debug] redirecting request 301: /douyin/feed/ --> /douyin/feed/?latest_time=1654581305&token=wy666666
+
+2022/06/07 13:55:05 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[1.349ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:05 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[0.770ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:05 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[0.401ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:55:05 | 200 |    5.843044ms | 171.113.227.149 | GET      "/douyin/feed/?latest_time=1654581305&token=wy666666"
+[GIN-debug] redirecting request 301: /douyin/feed/ --> /douyin/feed/?latest_time=1654581305&token=wy666666
+[GIN] 2022/06/07 - 13:55:06 | 200 |  507.178569ms | 171.113.227.149 | GET      "/static/1_0_bear.mp4"
+[GIN] 2022/06/07 - 13:55:06 | 200 |    1.609542ms | 171.113.227.149 | GET      "/douyin/favorite/list/?token=wy666666&user_id=1"
+
+2022/06/07 13:55:06 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.294ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:06 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[0.394ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:06 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[0.349ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:55:06 | 200 |    2.725616ms | 171.113.227.149 | GET      "/douyin/publish/list/?token=wy666666&user_id=1"
+
+2022/06/07 13:55:06 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.383ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:06 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[0.494ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:06 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[0.557ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:55:06 | 200 |   10.224091ms | 171.113.227.149 | GET      "/douyin/feed/?latest_time=1654581305&token=wy666666"
+[GIN] 2022/06/07 - 13:55:06 | 200 |  306.659833ms | 171.113.227.149 | GET      "/static/1_0_bear.mp4"
+
+2022/06/07 13:55:06 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.412ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:06 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[0.648ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:06 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[0.499ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:55:06 | 200 |    4.040553ms | 171.113.227.149 | GET      "/douyin/publish/list/?token=wy666666&user_id=1"
+[GIN] 2022/06/07 - 13:55:06 | 200 |    1.266836ms | 171.113.227.149 | GET      "/douyin/favorite/list/?token=wy666666&user_id=1"
+[GIN-debug] redirecting request 301: /douyin/feed/ --> /douyin/feed/?latest_time=1654581323177
+
+2022/06/07 13:55:24 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.404ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:24 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[0.360ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:24 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[0.397ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 0 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+
+2022/06/07 13:55:24 [31;1m/dy/simple-demo/dao/favorite.go:67 [35;1mrecord not found
+[0m[33m[0.552ms] [34;1m[rows:0][0m SELECT * FROM `favorite_info` WHERE (user_id = 0 and video_id = 1) AND `favorite_info`.`deleted_at` IS NULL ORDER BY `favorite_info`.`id` LIMIT 1
+[GIN] 2022/06/07 - 13:55:24 | 200 |   28.607377ms | 171.113.227.149 | GET      "/douyin/feed/?latest_time=1654581323177"
+[GIN] 2022/06/07 - 13:55:25 | 200 |     987.145µs | 171.113.227.149 | GET      "/douyin/favorite/list/?token=&user_id=1"
+[GIN-debug] redirecting request 301: /douyin/feed/ --> /douyin/feed/?latest_time=1654581324
+
+2022/06/07 13:55:25 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.787ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:25 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[0.419ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:25 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[0.412ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:55:25 | 200 |    6.241521ms | 171.113.227.149 | GET      "/douyin/publish/list/?token=&user_id=1"
+[GIN] 2022/06/07 - 13:55:25 | 200 |     563.468µs | 171.113.227.149 | GET      "/static/1_0_bear.mp4"
+
+2022/06/07 13:55:25 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.617ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:25 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[0.444ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:25 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[0.470ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 0 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+
+2022/06/07 13:55:25 [31;1m/dy/simple-demo/dao/favorite.go:67 [35;1mrecord not found
+[0m[33m[0.489ms] [34;1m[rows:0][0m SELECT * FROM `favorite_info` WHERE (user_id = 0 and video_id = 1) AND `favorite_info`.`deleted_at` IS NULL ORDER BY `favorite_info`.`id` LIMIT 1
+[GIN] 2022/06/07 - 13:55:25 | 200 |    9.320188ms | 171.113.227.149 | GET      "/douyin/feed/?latest_time=1654581324"
+[GIN] 2022/06/07 - 13:55:25 | 200 |     830.045µs | 171.113.227.149 | GET      "/douyin/favorite/list/?token=&user_id=1"
+
+2022/06/07 13:55:25 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.410ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:25 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[0.390ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:25 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[0.432ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:55:25 | 200 |    5.251007ms | 171.113.227.149 | GET      "/douyin/publish/list/?token=&user_id=1"
+[GIN-debug] redirecting request 301: /douyin/feed/ --> /douyin/feed/?latest_time=1654581325
+
+2022/06/07 13:55:25 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.598ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:25 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[0.541ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:25 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[0.525ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 0 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+
+2022/06/07 13:55:25 [31;1m/dy/simple-demo/dao/favorite.go:67 [35;1mrecord not found
+[0m[33m[0.511ms] [34;1m[rows:0][0m SELECT * FROM `favorite_info` WHERE (user_id = 0 and video_id = 1) AND `favorite_info`.`deleted_at` IS NULL ORDER BY `favorite_info`.`id` LIMIT 1
+[GIN] 2022/06/07 - 13:55:25 | 200 |    7.957065ms | 171.113.227.149 | GET      "/douyin/feed/?latest_time=1654581325"
+[GIN] 2022/06/07 - 13:55:25 | 200 |  410.118599ms | 171.113.227.149 | GET      "/static/1_0_bear.mp4"
+[GIN] 2022/06/07 - 13:55:31 | 200 |    1.764159ms | 171.113.227.149 | POST     "/douyin/user/login/?username=wy&password=66y666"
+[GIN] 2022/06/07 - 13:55:37 | 200 |    1.027102ms | 171.113.227.149 | POST     "/douyin/user/login/?username=wy&password=666666"
+[GIN] 2022/06/07 - 13:55:37 | 200 |      97.103µs | 171.113.227.149 | GET      "/douyin/user/?user_id=1&token=wy666666"
+[GIN] 2022/06/07 - 13:55:37 | 200 |    2.079354ms | 171.113.227.149 | GET      "/douyin/favorite/list/?token=wy666666&user_id=1"
+
+2022/06/07 13:55:37 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.517ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:37 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[0.423ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:37 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[0.485ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:55:37 | 200 |    3.975365ms | 171.113.227.149 | GET      "/douyin/publish/list/?token=wy666666&user_id=1"
+[GIN] 2022/06/07 - 13:55:38 | 200 |  308.275354ms | 171.113.227.149 | GET      "/static/1_0_bear.mp4"
+[GIN-debug] redirecting request 301: /douyin/feed/ --> /douyin/feed/?latest_time=1654581325&token=wy666666
+
+2022/06/07 13:55:42 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.343ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:42 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[0.466ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:42 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[0.412ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:55:42 | 200 |    3.267128ms | 171.113.227.149 | GET      "/douyin/feed/?latest_time=1654581325&token=wy666666"
+[GIN] 2022/06/07 - 13:55:43 | 200 |     444.148µs | 171.113.227.149 | GET      "/static/1_0_bear.mp4"
+[GIN-debug] redirecting request 301: /douyin/feed/ --> /douyin/feed/?latest_time=1654581342&token=wy666666
+[GIN] 2022/06/07 - 13:55:43 | 200 |     2.74299ms | 171.113.227.149 | GET      "/douyin/favorite/list/?token=wy666666&user_id=1"
+
+2022/06/07 13:55:43 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[1.027ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:43 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[0.879ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:43 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[0.729ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:55:43 | 200 |    6.604517ms | 171.113.227.149 | GET      "/douyin/publish/list/?token=wy666666&user_id=1"
+
+2022/06/07 13:55:43 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.331ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:43 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[0.321ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:43 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[0.369ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:55:43 | 200 |    3.294211ms | 171.113.227.149 | GET      "/douyin/feed/?latest_time=1654581342&token=wy666666"
+[GIN-debug] redirecting request 301: /douyin/feed/ --> /douyin/feed/?latest_time=1654581343&token=wy666666
+
+2022/06/07 13:55:43 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.329ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:43 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[0.845ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:43 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[0.945ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:55:43 | 200 |    4.898183ms | 171.113.227.149 | GET      "/douyin/publish/list/?token=wy666666&user_id=1"
+[GIN] 2022/06/07 - 13:55:43 | 200 |    6.820436ms | 171.113.227.149 | GET      "/douyin/favorite/list/?token=wy666666&user_id=1"
+
+2022/06/07 13:55:43 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[1.691ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:43 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[1.185ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:43 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[1.017ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:55:43 | 200 |    6.437424ms | 171.113.227.149 | GET      "/douyin/feed/?latest_time=1654581343&token=wy666666"
+[GIN] 2022/06/07 - 13:55:44 | 200 |  513.492999ms | 171.113.227.149 | GET      "/static/1_0_bear.mp4"
+
+2022/06/07 13:55:49 [32m/dy/simple-demo/dao/userDao.go:83
+[0m[33m[0.347ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:49 [32m/dy/simple-demo/dao/userDao.go:55
+[0m[33m[1.217ms] [34;1m[rows:1][0m SELECT * FROM `user_info` WHERE id = 1 AND `user_info`.`deleted_at` IS NULL AND `user_info`.`id` = 1 ORDER BY `user_info`.`id` LIMIT 1
+
+2022/06/07 13:55:49 [31;1m/dy/simple-demo/dao/relationDao.go:81 [35;1mrecord not found
+[0m[33m[1.341ms] [34;1m[rows:0][0m SELECT * FROM `follow_info` WHERE (user_id = 1 and follow_user_id = 1) AND `follow_info`.`deleted_at` IS NULL ORDER BY `follow_info`.`id` LIMIT 1
+查询失败
+[GIN] 2022/06/07 - 13:55:49 | 200 |    3.086098ms | 171.113.227.149 | GET      "/douyin/favorite/list/?token=wy666666&user_id=1"
+[GIN] 2022/06/07 - 13:55:49 | 200 |    7.289021ms | 171.113.227.149 | GET      "/douyin/publish/list/?token=wy666666&user_id=1"

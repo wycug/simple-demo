@@ -55,16 +55,45 @@ func FavoriteAction(c *gin.Context) {
 }
 
 // FavoriteList all users have same favorite video list
+// func FavoriteList(c *gin.Context) {
+// 	token := c.Query("token")
+// 	userId := c.Query("user_id")
+// 	user_id, _ := strconv.ParseInt(userId, 10, 64)
+// 	if _, exist := UserIsExist(token); exist {
+// 		videos, err := dao.GetFavoriteList(userId)
+// 		if err != nil {
+// 			log.Println("get favorite list fail, err =", err.Error())
+// 			c.JSON(http.StatusOK, FavoriteActionListResponse{
+
+// 				Response: Response{
+// 					StatusCode: 1,
+// 					StatusMsg:  "get favorite list fail",
+// 				},
+// 				Videos: nil,
+// 			})
+// 			return
+// 		}
+// 		c.JSON(http.StatusOK, FavoriteActionListResponse{
+// 			Response: Response{
+// 				StatusCode: 0,
+// 			},
+// 			Videos: VideoInfoListToVideoList(videos, user_id),
+// 		})
+// 	} else {
+// 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
+// 	}
+// }
+
+
+
 func FavoriteList(c *gin.Context) {
 	token := c.Query("token")
 	userId := c.Query("user_id")
-	user_id, _ := strconv.ParseInt(userId, 10, 64)
 	if _, exist := UserIsExist(token); exist {
 		videos, err := dao.GetFavoriteList(userId)
 		if err != nil {
 			log.Println("get favorite list fail, err =", err.Error())
 			c.JSON(http.StatusOK, FavoriteActionListResponse{
-
 				Response: Response{
 					StatusCode: 1,
 					StatusMsg:  "get favorite list fail",
@@ -73,14 +102,41 @@ func FavoriteList(c *gin.Context) {
 			})
 			return
 		}
+		id, _ := strconv.ParseInt(userId, 10, 64)
+		res := make([]Video, 0)
+		for i := 0; i < len(videos); i++ {
+			tmp := VideoInfo2Video(videos[i], id)
+			res = append(res, tmp)
+		}
 		c.JSON(http.StatusOK, FavoriteActionListResponse{
 			Response: Response{
 				StatusCode: 0,
+				StatusMsg:  "get favorite video success",
 			},
-			Videos: VideoInfoListToVideoList(videos, user_id),
+			Videos: res,
 		})
 	} else {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
+	}
+}
+
+func VideoInfo2Video(video dao.VideoInfo, userId int64) Video {
+	userInfo, _ := dao.GetUserInfoById(userId)
+	return Video{
+		Id: video.Id,
+		Author: User{
+			Id:            userId,
+			Name:          userInfo.Name,
+			FollowCount:   userInfo.FollowCount,
+			FollowerCount: userInfo.FollowerCount,
+			IsFollow:      userInfo.IsFollow,
+		},
+		PlayUrl:       video.PlayUrl,
+		CoverUrl:      video.CoverUrl,
+		FavoriteCount: video.FavoriteCount,
+		CommentCount:  video.CommentCount,
+		IsFavorite:    true,
+		Title:         video.Title,
 	}
 }
 
