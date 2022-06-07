@@ -1,14 +1,18 @@
 package controller
 
 import (
+	"bytes"
 	"fmt"
+	"image/jpeg"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 
 	"github.com/RaymondCode/simple-demo/dao"
 	"github.com/gin-gonic/gin"
+	ffmpeg "github.com/u2takey/ffmpeg-go"
 )
 
 type VideoListResponse struct {
@@ -53,9 +57,28 @@ func Publish(c *gin.Context) {
 		})
 		return
 	}
+
+	imageName := strings.Replace(filename, ".mp4", ".jpeg", -1)
+	saveImage := filepath.Join("./public/", imageName)
+
+	buf := bytes.NewBuffer(nil)
+	err = ffmpeg.Input(saveFile).
+		Filter("select", ffmpeg.Args{fmt.Sprintf("gte(n,%d)", 1)}).
+		Output("pipe:", ffmpeg.KwArgs{"vframes": 1, "format": "image2", "vcodec": "mjpeg"}).
+		WithOutput(buf, os.Stdout).
+		Run()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	img, _ := jpeg.Decode(buf)
+	imgw, _ := os.Create(saveImage)
+	jpeg.Encode(imgw, img, &jpeg.Options{100})
+
 	ipport := fmt.Sprintf("%s%s/static/", URL, PORT)
 	url := ipport + finalName
-	err = dao.CreateVideoInfo(user.Id, url, "", title)
+	imgUrl := ipport + imageName
+	err = dao.CreateVideoInfo(user.Id, url, imgUrl, title)
 	if err != nil {
 		c.JSON(http.StatusOK, Response{
 			StatusCode: 1,
