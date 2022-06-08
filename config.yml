@@ -13,6 +13,7 @@ mysql:
   connMaxLifetime: 1440
 
 redis:
-  addr: 180.76.164.111:6379
+  addr: localhost:6379
+#  addr: 180.76.164.111:6379
   #  password: 123456
   db: 0
