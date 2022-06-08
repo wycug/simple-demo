@@ -4,6 +4,7 @@ package config
 type Config struct {
 	Server Server `mapstructure:"server"`
 	Mysql  Mysql  `mapstructure:"mysql"`
+	Redis  Redis  `mapstructure:"redis"`
 }
 
 // Server 服务启动端口号配置
@@ -20,4 +21,10 @@ type Mysql struct {
 	MaxIdleConns    int    `mapstructure:"maxIdleConns"`
 	MaxOpenConns    int    `mapstructure:"maxOpenConns"`
 	ConnMaxLifetime int    `mapstructure:"connMaxLifetime"`
+}
+// Redis Redis配置
+type Redis struct {
+	Addr     string `mapstructure:"addr"`
+	Password string `mapstructure:"password"`
+	DB       int    `mapstructure:"db"`
 }

@@ -11,10 +11,10 @@ import (
 
 
 
+// const URL string = "http://180.76.164.111"
+
+
 const URL string = "http://106.13.196.236"
-
-
-// const URL string = "http://106.13.196.236"
 
 
 // //http://192.168.50.1:8080/
@@ -28,7 +28,7 @@ const STATICPATH string = "./public"
 //host := "127.0.0.1"
 // const SQLHOST string = "127.0.0.1"
 
-const SQLHOST string = "127.0.0.1"
+const SQLHOST string = "180.76.164.111"
 const SQLPORT string = "3306"
 const SQLDATABASE string = "douyin"
 const SQLUSER string = "root"
