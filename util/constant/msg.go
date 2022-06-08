@@ -22,6 +22,13 @@ var msg = []string{
 	"Follow failed",                    // 关注失败
 	"Unfollow failed",                  // 取消关注失败
 	"Get list failed",                  // 获取列表失败
+	"Get follow ID list error",         // 获取关注id列表失败
+	"Get follow list error",            // 获取关注列表失败
+	"Get follower ID list error",       // 获取粉丝id列表失败
+	"Get follower list error",          // 获取粉丝列表失败
+	"Get none follow list error",       // 获取非关注粉丝列表失败
+	"Get is follow list error",         // 获取已关注粉丝列表失败
+	"Transaction commit error",         // 事务提交错误
 }
 
 func Msg(code int) string {

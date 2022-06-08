@@ -6,6 +6,8 @@
 package dao
 
 import (
+	"fmt"
+	"strconv"
 	"sync"
 
 	"github.com/RaymondCode/simple-demo/global"
@@ -30,9 +32,22 @@ func NewFollowDaoInstance() *FollowDao {
 
 // 1、先根据user表 用户id
 // 2、用户id 作为user_id 字段，找所有相关的follow_id数据
-
 // 关注列表
-func (f FollowDao) GetFollowList(userID int64) ([]int64, error) {
+
+func (f FollowDao) GetFollowList(userID int64) ([]string, error) {
+	key := fmt.Sprintf("%v:followlist", userID)
+	result, err := global.Rdb.Exists(ctx, key).Result()
+	if err != nil {
+		return nil, err
+	}
+	if result == 0 {
+		return getFollowList(userID)
+	} else {
+		return global.Rdb.SMembers(ctx, key).Result()
+	}
+}
+
+func getFollowList(userID int64) ([]string, error) {
 	// 找到所有和userID对应的条目
 	var followRelations []*repository.FollowRelation
 	if err := global.Db.Where("user_id = ?", userID).Find(&followRelations).Error; err != nil {
@@ -41,17 +56,23 @@ func (f FollowDao) GetFollowList(userID int64) ([]int64, error) {
 
 	// 获取list的长度，声明对应长度的数组
 	n := len(followRelations)
-	followRes := make([]int64, n)
+	followRes := make([]string, n)
 
+	pipe := global.Rdb.TxPipeline()
+	key := fmt.Sprintf("%v:followlist", userID)
 	for i := 0; i < n; i++ {
-		followRes[i] = followRelations[i].FollowToID
+		followRes[i] = strconv.FormatInt(followRelations[i].FollowToID, 10)
+		pipe.SAdd(ctx, key, followRes[i])
+	}
+	if _, err := pipe.Exec(ctx); err != nil {
+		return nil, err
 	}
 
 	return followRes, nil
-
 }
 
 // 传入关注id列表，返回关注信息列表
+
 func (f FollowDao) GetFollowInfoList(followRes []int64) ([]*repository.User, error) {
 	// 先声明一个数组，
 	var followerInfo []*repository.User

@@ -6,18 +6,20 @@
 package dao
 
 import (
+	"github.com/RaymondCode/simple-demo/util"
 	"testing"
 
 	"github.com/RaymondCode/simple-demo/initializer"
 	"github.com/magiconair/properties/assert"
 )
 
-func TestFollwerDao_FollowerList(t *testing.T) {
+func TestFollowerDao_GetFollowerList(t *testing.T) {
 	initializer.InitConfig()
-	initializer.InitDataBase()
+	initializer.InitRedis()
 	followerDao := NewFollowerDaoInstance()
-	output, _ := followerDao.GetFollowerList(18)
-	assert.Equal(t, len(output), 4)
+	output, _ := followerDao.GetFollowerList(5)
+	// （t,真实长度，期望的长度）
+	assert.Equal(t, len(output), 3)
 }
 
 func TestFollowerDao_FollowerInfoList(t *testing.T) {
@@ -28,6 +30,8 @@ func TestFollowerDao_FollowerInfoList(t *testing.T) {
 	// 找18的粉丝列表
 	input, _ := followerDao.GetFollowerList(18)
 	// 输入粉丝列表，输出对应粉丝信息
-	output, _ := followerDao.GetFollowerInfoList(input)
+	output, _ := followerDao.GetFollowerInfoList(util.Str2Int64(input))
 	assert.Equal(t, len(output), len(input))
 }
+
+
