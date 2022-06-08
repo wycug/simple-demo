@@ -22,4 +22,11 @@ const (
 	FollowFailed                            // 关注失败
 	UnfollowFailed                          // 取消关注失败
 	GetListFailed                           // 获取列表失败
+	GetFollowIDListError                    // 获取关注id列表失败
+	GetFollowListError                      // 获取关注列表失败
+	GetFollowerIDListError                  // 获取粉丝id列表失败
+	GetFollowerListError                    // 获取粉丝列表失败
+	GetNoneFollowListError                  // 获取非关注粉丝列表失败
+	GetIsFollowListError                    // 获取已关注粉丝列表失败
+	TransactionCommitError                  // 事务提交错误
 )

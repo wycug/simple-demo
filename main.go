@@ -9,13 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
-
 // const URL string = "http://180.76.164.111"
 
-
 const URL string = "http://106.13.196.236"
-
 
 // //http://192.168.50.1:8080/
 // const URL string = "http://192.168.137.1"
@@ -43,6 +39,7 @@ func main() {
 	r := gin.Default()
 	initializer.InitConfig()
 	initializer.InitDataBase()
+	initializer.InitRedis()
 
 	initRouter(r)
 
